@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Doudet — Portfolio Audiovisuel</title>
+    
+    <!-- Google Fonts: Cormorant Garamond (serif italic) + Space Grotesk (sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Grid lines -->
+    <div class="grid-lines">
+        <div class="grid-line" style="--line-pos: 16.67%"><span class="grid-num">01</span></div>
+        <div class="grid-line" style="--line-pos: 33.33%"><span class="grid-num">02</span></div>
+        <div class="grid-line" style="--line-pos: 50%"><span class="grid-num">03</span></div>
+        <div class="grid-line" style="--line-pos: 66.67%"><span class="grid-num">04</span></div>
+        <div class="grid-line" style="--line-pos: 83.33%"><span class="grid-num">05</span></div>
+    </div>
+
+    <!-- Custom cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-ring"></div>
+
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">Thomas Doudet</div>
+            <nav class="nav-links">
+                <a href="#hero">Accueil</a>
+                <a href="#about">À propos</a>
+                <a href="#projects">Projets</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- SECTION 1: HERO -->
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title reveal">Thomas Doudet</h1>
+                <div class="hero-role">
+                    <span class="role-item">Vidéaste</span>
+                    <span class="role-item">Designer</span>
+                    <span class="role-item">Créateur</span>
+                </div>
+                <p class="hero-quote reveal">« L'image raconte une histoire, le mouvement la vie »</p>
+                <div class="hero-line reveal"></div>
+            </div>
+            <div class="hero-grain"></div>
+        </section>
+
+        <!-- SECTION 2: STATEMENT (First) -->
+        <section class="statement">
+            <h2 class="statement-title reveal">Chaque projet naît d'une intention.</h2>
+            <p class="statement-text reveal-left">
+                Que ce soit une production live, une vidéo promotionnelle ou une création graphique, 
+                mon approche reste cohérente : penser l'émotion, structurer la narration, et transformer 
+                chaque idée en une expérience immersive.
+            </p>
+        </section>
+
+        <!-- SECTION 3: ABOUT -->
+        <section id="about" class="about">
+            <div class="eyebrow reveal">À propos</div>
+            <div class="about-container">
+                <div class="about-images reveal">
+                    <div class="about-img-main" style="background: linear-gradient(135deg, #1E2233 0%, #2A3050 100%);"></div>
+                    <div class="about-img-secondary" style="background: linear-gradient(135deg, #2A3050 0%, #1A1F30 100%);"></div>
+                </div>
+                <div class="about-content">
+                    <h2 class="about-title reveal">Issu du BUT MMI</h2>
+                    <p class="about-bio reveal-left">
+                        Vidéaste et designer graphique avec une passion pour la narration visuelle 
+                        et la production audiovisuelle. Formé aux Métiers du Multimédia et de l'Internet, 
+                        j'allie rigueur technique et sensibilité créative pour concevoir des projets 
+                        qui marquent et inspirent.
+                    </p>
+                    <div class="about-skills reveal">
+                        <h3>Compétences</h3>
+                        <div class="skills-list">
+                            <span>Montage vidéo</span>
+                            <span>Réalisation</span>
+                            <span>Design graphique</span>
+                            <span>Motion design</span>
+                            <span>Production live</span>
+                            <span>Photographie</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: PARCOURS (Timeline Horizontal) -->
+        <section class="parcours">
+            <div class="parcours-intro">
+                <div class="eyebrow reveal">Parcours</div>
+                <h2 class="parcours-title reveal">Du pixel à l'écran</h2>
+                <div class="parcours-line reveal"></div>
+            </div>
+
+            <div class="parcours-scroll-container">
+                <div class="parcours-track">
+                    <!-- Bloc 1: Lycée -->
+                    <div class="parcours-bloc">
+                        <div class="parcours-year">2020</div>
+                        <div class="parcours-separator"></div>
+                        
+                        <h3 class="parcours-bloc-title" data-speed="0.7">Lycée</h3>
+                        <p class="parcours-bloc-subtitle">Les premières images</p>
+                        
+                        <p class="parcours-bloc-text" data-speed="1.0">
+                            Les débuts de la passion pour l'image. Premiers pas dans la photographie et la vidéo, découverte des techniques de base et de l'univers cinématographique.
+                        </p>
+                        
+                        <div class="parcours-images">
+                            <div class="parcours-image parcours-image-1" 
+                                 data-speed="1.3" 
+                                 style="background: linear-gradient(135deg, #1E2233 0%, #2A3050 100%);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bloc 2: BUT R&T -->
+                    <div class="parcours-bloc">
+                        <div class="parcours-year">2021</div>
+                        <div class="parcours-separator"></div>
+                        
+                        <h3 class="parcours-bloc-title" data-speed="0.7">BUT R&T</h3>
+                        <p class="parcours-bloc-subtitle">Réseaux & Télécoms</p>
+                        
+                        <p class="parcours-bloc-text" data-speed="1.0">
+                            Réorientation vers une formation technique. Découverte des réseaux, des systèmes et des infrastructures qui soutiennent la transmission audiovisuelle.
+                        </p>
+                        
+                        <div class="parcours-images">
+                            <div class="parcours-image parcours-image-2" 
+                                 data-speed="1.3" 
+                                 style="background: linear-gradient(135deg, #2A3050 0%, #1A1F30 100%);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bloc 3: MMI (Principal) -->
+                    <div class="parcours-bloc parcours-bloc-main">
+                        <div class="parcours-year">2022</div>
+                        <div class="parcours-separator"></div>
+                        
+                        <h3 class="parcours-bloc-title parcours-bloc-title-main" data-speed="0.7">MMI</h3>
+                        <p class="parcours-bloc-subtitle">Métiers du Multimédia et de l'Internet</p>
+                        
+                        <p class="parcours-bloc-text" data-speed="1.0">
+                            Convergence vers le multimédia. Formation complète en audiovisuel, design graphique, web et création numérique. Cœur de ma spécialisation.
+                        </p>
+                        
+                        <div class="parcours-images">
+                            <div class="parcours-image parcours-image-wide" 
+                                 data-speed="1.3" 
+                                 style="background: linear-gradient(135deg, #1A1F30 0%, #2A3F50 100%);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bloc 4: Le Studio -->
+                    <div class="parcours-bloc">
+                        <div class="parcours-year">2024</div>
+                        <div class="parcours-separator"></div>
+                        
+                        <h3 class="parcours-bloc-title" data-speed="0.7">Le Studio</h3>
+                        <p class="parcours-bloc-subtitle">Production & Réalisation</p>
+                        
+                        <p class="parcours-bloc-text" data-speed="1.0">
+                            Entrée dans le monde professionnel. Production live, réalisation vidéo et coordination d'événements. Mise en œuvre concrète de la stratégie créative.
+                        </p>
+                        
+                        <div class="parcours-images">
+                            <div class="parcours-image parcours-image-cinema" 
+                                 data-speed="1.3" 
+                                 style="background: linear-gradient(135deg, #2A3F50 0%, #1E2233 100%);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bloc 5: Alternance -->
+                    <div class="parcours-bloc">
+                        <div class="parcours-year">2025</div>
+                        <div class="parcours-separator"></div>
+                        
+                        <h3 class="parcours-bloc-title" data-speed="0.7">Alternance</h3>
+                        <p class="parcours-bloc-subtitle">Webmaster & Création</p>
+                        
+                        <p class="parcours-bloc-text" data-speed="1.0">
+                            Fusion des compétences web et création. Développement de stratégies digitales, gestion de contenu et production créative pour des projets d'envergure.
+                        </p>
+                        
+                        <div class="parcours-images">
+                            <div class="parcours-image parcours-image-1" 
+                                 data-speed="1.3" 
+                                 style="background: linear-gradient(135deg, #1F2A3F 0%, #2A3050 100%);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: PROJECTS GALLERY -->
+        <section id="projects" class="projects">
+            <div class="eyebrow reveal">Projets sélectionnés</div>
+            <h2 class="projects-title reveal">Travaux récents</h2>
+            
+            <div class="gallery-horizontal-container">
+                <div class="gallery-horizontal reveal">
+                    <div class="project-card">
+                        <div class="project-image" style="background: linear-gradient(135deg, #1E2233 0%, #2A3050 100%);"></div>
+                        <h3 class="project-title">La Cérémonie des Walid</h3>
+                        <p class="project-meta">Production Live • 2025</p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image" style="background: linear-gradient(135deg, #2A3050 0%, #1A1F30 100%);"></div>
+                        <h3 class="project-title">Trailer Le Studio</h3>
+                        <p class="project-meta">Vidéo • 2025</p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image" style="background: linear-gradient(135deg, #1A1F30 0%, #2A3F50 100%);"></div>
+                        <h3 class="project-title">Sweat MMI — We Are Walid</h3>
+                        <p class="project-meta">Design Graphique • 2025</p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image" style="background: linear-gradient(135deg, #2A3F50 0%, #1E2233 100%);"></div>
+                        <h3 class="project-title">Sweat MMI — Walid's World</h3>
+                        <p class="project-meta">Design Graphique • 2024</p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image" style="background: linear-gradient(135deg, #1F2A3F 0%, #2A3050 100%);"></div>
+                        <h3 class="project-title">Shootings Inter-BDE</h3>
+                        <p class="project-meta">Photographie • 2024</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: MARQUEE -->
+        <section class="marquee-section">
+            <div class="marquee reveal">
+                <div class="marquee-content">
+                    <span>CINÉMA</span>
+                    <span>·</span>
+                    <span>ÉMOTION</span>
+                    <span>·</span>
+                    <span>ART</span>
+                    <span>·</span>
+                    <span>CRÉATION</span>
+                    <span>·</span>
+                    <span>CINÉMA</span>
+                    <span>·</span>
+                    <span>ÉMOTION</span>
+                    <span>·</span>
+                    <span>ART</span>
+                    <span>·</span>
+                    <span>CRÉATION</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: CONTACT + FOOTER -->
+        <section id="contact" class="contact">
+            <div class="contact-content">
+                <h2 class="contact-title reveal">Travaillons ensemble</h2>
+                <p class="contact-subtitle reveal">Vous avez un projet en tête ? Parlons-en.</p>
+                <a href="mailto:thomas@example.com" class="contact-email reveal">thomas@example.com</a>
+                
+                <div class="contact-socials reveal">
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="#" class="social-link">LinkedIn</a>
+                    <a href="#" class="social-link">Vimeo</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Thomas Doudet. Tous droits réservés.</p>
+            <p>Portfolio cinématique • Réalisation & Design graphique</p>
+        </div>
+    </footer>
+
+    <script src="script/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,796 @@
+/* ===================================
+   DESIGN SYSTEM & VARIABLES
+   =================================== */
+:root {
+    /* Couleurs */
+    --bg:        #0A0E1A;   /* Fond principal — bleu nuit très sombre */
+    --bg2:       #0D1120;   /* Fond alternatif légèrement plus clair */
+    --cream:     #F5E6C8;   /* Texte principal — crème chaud */
+    --muted:     #C4B89A;   /* Texte secondaire — beige sourd */
+    --dim:       rgba(245, 230, 200, 0.35);
+    --line:      #1A1F30;   /* Lignes de grille, séparateurs subtils */
+    --line-num:  #2A3050;   /* Numéros de grille, labels discrets */
+    --accent:    #1E2233;   /* Accents, bordures */
+
+    /* Typographies */
+    --serif:     'Cormorant Garamond', serif;
+    --sans:      'Space Grotesk', sans-serif;
+}
+
+/* ===================================
+   RESET & BASE STYLES
+   =================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ===================================
+   GRID LINES (Background)
+   =================================== */
+.grid-lines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.grid-line {
+    position: absolute;
+    left: var(--line-pos);
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: var(--line);
+}
+
+.grid-num {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--line-num);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+}
+
+/* ===================================
+   CUSTOM CURSOR
+   =================================== */
+.cursor {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--cream);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--cream);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+}
+
+/* ===================================
+   NAVBAR
+   =================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 40px 80px;
+    background: var(--bg);
+    z-index: 1000;
+    border-bottom: 1px solid var(--accent);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-links a {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--cream);
+}
+
+/* ===================================
+   MAIN LAYOUT
+   =================================== */
+main {
+    position: relative;
+    z-index: 10;
+}
+
+/* ===================================
+   HERO SECTION
+   =================================== */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px;
+    margin-top: 80px;
+    position: relative;
+    background: var(--bg);
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 900px;
+}
+
+.hero-title {
+    font-family: var(--serif);
+    font-size: clamp(96px, 12vw, 160px);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 40px;
+    letter-spacing: -0.02em;
+}
+
+.hero-role {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 60px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+}
+
+.role-item {
+    position: relative;
+}
+
+.role-item:not(:last-child)::after {
+    content: '•';
+    position: absolute;
+    right: -12px;
+    top: 0;
+}
+
+.hero-quote {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 40px;
+    line-height: 1.5;
+}
+
+.hero-line {
+    width: 80px;
+    height: 1px;
+    background: var(--cream);
+    margin: 40px auto 0;
+    opacity: 0.5;
+}
+
+.hero-grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' result='noise' /%3E%3C/filter%3E%3Crect width='400' height='400' fill='white' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+}
+
+/* ===================================
+   STATEMENT SECTION (First)
+   =================================== */
+.statement {
+    padding: 120px 80px;
+    text-align: center;
+    background: var(--bg);
+    position: relative;
+    z-index: 10;
+}
+
+.statement-title {
+    font-family: var(--serif);
+    font-size: clamp(36px, 8vw, 72px);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 60px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.statement-text {
+    max-width: 720px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--muted);
+}
+
+/* ===================================
+   ABOUT SECTION
+   =================================== */
+.about {
+    padding: 120px 80px;
+    background: var(--bg);
+    position: relative;
+    z-index: 10;
+}
+
+.eyebrow {
+    text-align: center;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--line-num);
+    margin-bottom: 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.eyebrow::before,
+.eyebrow::after {
+    content: '';
+    flex: 1;
+    max-width: 100px;
+    height: 1px;
+    background: var(--line);
+}
+
+.about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.about-images {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    min-height: 400px;
+}
+
+.about-img-main {
+    width: 100%;
+    height: 300px;
+    border: 1px solid var(--accent);
+    position: relative;
+}
+
+.about-img-main::before,
+.about-img-main::after {
+    content: '';
+    position: absolute;
+    background: var(--cream);
+}
+
+.about-img-main::before {
+    width: 12px;
+    height: 12px;
+    top: -6px;
+    left: -6px;
+    border-top: 1px solid var(--cream);
+    border-left: 1px solid var(--cream);
+}
+
+.about-img-secondary {
+    width: 100%;
+    height: 180px;
+    border: 1px solid var(--accent);
+}
+
+.about-title {
+    font-family: var(--serif);
+    font-size: clamp(32px, 6vw, 48px);
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 40px;
+}
+
+.about-bio {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-bottom: 60px;
+}
+
+.about-skills {
+    border-top: 1px solid var(--line);
+    padding-top: 40px;
+}
+
+.about-skills h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--line-num);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.skills-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 32px;
+}
+
+.skills-list span {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* ===================================
+   PARCOURS SECTION (Horizontal Scroll)
+   =================================== */
+.parcours {
+    padding: 120px 80px;
+    background: var(--bg);
+    position: relative;
+    z-index: 10;
+}
+
+.parcours-intro {
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.parcours-title {
+    font-family: var(--serif);
+    font-size: clamp(36px, 8vw, 72px);
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 40px;
+}
+
+.parcours-line {
+    width: 120px;
+    height: 1px;
+    background: var(--cream);
+    margin: 0 auto;
+    opacity: 0.5;
+}
+
+/* Horizontal scroll container */
+.parcours-scroll-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin: 0 -80px;
+    padding: 0 80px;
+}
+
+.parcours-track {
+    display: flex;
+    gap: 80px;
+    width: max-content;
+}
+
+/* Bloc styling */
+.parcours-bloc {
+    flex-shrink: 0;
+    width: 360px;
+    padding: 60px 0;
+    position: relative;
+}
+
+.parcours-bloc-main {
+    width: 420px;
+}
+
+.parcours-year {
+    font-family: var(--sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--line-num);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.parcours-separator {
+    width: 1px;
+    height: 40px;
+    background: var(--line);
+    margin-bottom: 40px;
+}
+
+.parcours-bloc-title {
+    font-family: var(--serif);
+    font-size: 100px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 0.9;
+    margin-bottom: 20px;
+    will-change: transform;
+}
+
+.parcours-bloc-title-main {
+    font-size: 120px;
+}
+
+.parcours-bloc-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 40px;
+    font-weight: 400;
+}
+
+.parcours-bloc-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 40px;
+    max-width: 320px;
+    will-change: transform;
+}
+
+.parcours-images {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.parcours-image {
+    border: 1px solid var(--accent);
+    will-change: transform;
+}
+
+.parcours-image-1 {
+    width: 280px;
+    height: 180px;
+    aspect-ratio: auto;
+}
+
+.parcours-image-2 {
+    width: 300px;
+    height: 160px;
+}
+
+.parcours-image-wide {
+    width: 360px;
+    height: 200px;
+}
+
+.parcours-image-cinema {
+    width: 340px;
+    height: 190px;
+}
+
+/* ===================================
+   PROJECTS GALLERY SECTION
+   =================================== */
+.projects {
+    padding: 120px 80px;
+    background: var(--bg);
+    position: relative;
+    z-index: 10;
+}
+
+.projects-title {
+    font-family: var(--serif);
+    font-size: clamp(36px, 8vw, 72px);
+    font-style: italic;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.gallery-horizontal-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-horizontal {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+}
+
+.project-card {
+    min-width: 400px;
+    flex-shrink: 0;
+}
+
+.project-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--accent);
+    margin-bottom: 16px;
+    border: 1px solid var(--accent);
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.02);
+}
+
+.project-title {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 8px;
+}
+
+.project-meta {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+}
+
+/* ===================================
+   MARQUEE SECTION
+   =================================== */
+.marquee-section {
+    padding: 60px 80px;
+    background: var(--bg);
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.marquee {
+    position: relative;
+    width: 100%;
+}
+
+.marquee-content {
+    display: flex;
+    gap: 20px;
+    white-space: nowrap;
+    font-family: var(--serif);
+    font-size: 32px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--muted);
+    animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* ===================================
+   CONTACT SECTION
+   =================================== */
+.contact {
+    padding: 120px 80px;
+    background: var(--bg);
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.contact-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.contact-title {
+    font-family: var(--serif);
+    font-size: clamp(48px, 10vw, 96px);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.contact-subtitle {
+    font-size: 18px;
+    color: var(--muted);
+    margin-bottom: 40px;
+}
+
+.contact-email {
+    display: inline-block;
+    font-size: 20px;
+    text-transform: lowercase;
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 1px solid var(--cream);
+    margin-bottom: 60px;
+    padding-bottom: 8px;
+    transition: opacity 0.3s ease;
+}
+
+.contact-email:hover {
+    opacity: 0.7;
+}
+
+.contact-socials {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.social-link {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-link:hover {
+    color: var(--cream);
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+.footer {
+    padding: 40px 80px;
+    background: var(--bg2);
+    border-top: 1px solid var(--accent);
+    position: relative;
+    z-index: 10;
+}
+
+.footer-content {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.footer-content p {
+    margin: 4px 0;
+}
+
+/* ===================================
+   ANIMATIONS - Reveal
+   =================================== */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+}
+
+/* ===================================
+   RESPONSIVE / MOBILE
+   =================================== */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 20px 40px;
+    }
+
+    .hero {
+        padding: 40px;
+        margin-top: 60px;
+    }
+
+    .statement,
+    .about,
+    .projects,
+    .contact {
+        padding: 80px 40px;
+    }
+
+    .about-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .project-card {
+        min-width: 300px;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+        display: none;
+    }
+
+    .parcours {
+        padding: 80px 40px;
+    }
+
+    .parcours-scroll-container {
+        margin: 0 -40px;
+        padding: 0 40px;
+    }
+
+    .parcours-track {
+        gap: 60px;
+    }
+
+    .parcours-bloc {
+        width: 300px;
+        padding: 40px 0;
+    }
+
+    .parcours-bloc-main {
+        width: 340px;
+    }
+
+    .parcours-bloc-title {
+        font-size: 80px;
+    }
+
+    .parcours-bloc-title-main {
+        font-size: 100px;
+    }
+
+    .parcours-image-1,
+    .parcours-image-2,
+    .parcours-image-wide,
+    .parcours-image-cinema {
+        width: 100%;
+        height: auto;
+    }
+}
