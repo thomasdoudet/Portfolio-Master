@@ -61,17 +61,63 @@ body {
     background: var(--line);
 }
 
+/* Top label — just below the nav bar (nav: padding 40px + ~22px content + 40px ≈ 102px) */
 .grid-num {
     position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 112px;
+    left: -6px;
+    transform: translateX(-100%);
+    font-family: var(--sans);
     font-size: 10px;
+    font-weight: 400;
     color: var(--line-num);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-weight: 500;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
 }
+
+/* Bottom label — mirrored near viewport bottom */
+.grid-num--bottom {
+    top: auto;
+    bottom: 28px;
+}
+
+/* Corner crosshair markers at line-1 and line-5 × top and bottom edges */
+.grid-corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    transform: translateX(-50%);
+}
+
+.grid-corner::before,
+.grid-corner::after {
+    content: '';
+    position: absolute;
+    background: var(--line-num);
+}
+
+/* Horizontal arm */
+.grid-corner::before {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    transform: translateY(-50%);
+}
+
+/* Vertical arm */
+.grid-corner::after {
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+    transform: translateX(-50%);
+}
+
+.grid-corner--tl { top: 0;    left: 16.67%; }
+.grid-corner--tr { top: 0;    left: 83.33%; }
+.grid-corner--bl { bottom: 0; left: 16.67%; }
+.grid-corner--br { bottom: 0; left: 83.33%; }
 
 /* ===================================
    CUSTOM CURSOR
@@ -161,66 +207,151 @@ main {
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 80px;
-    margin-top: 80px;
+    padding: 0 80px;
     position: relative;
     background: var(--bg);
+    overflow: hidden;
+}
+
+/* Background — placeholder tons chauds (future : vraie photo) */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a1510 0%, #2a1c0a 30%, #0d0a08 70%, #0A0E1A 100%);
+    z-index: 0;
+}
+
+/* Overlay directionnel — lisibilité du texte à gauche */
+.hero-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(10,14,26,0.65) 0%,
+        rgba(10,14,26,0.25) 50%,
+        rgba(10,14,26,0.45) 100%
+    );
+    z-index: 0;
 }
 
 .hero-content {
-    text-align: center;
-    max-width: 900px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
 }
 
+/* H1 conteneur — flex colonne */
 .hero-title {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Wrapper overflow:hidden — masque le slide-up GSAP */
+.hero-name-clip {
+    overflow: hidden;
+}
+
+/* Le texte — regular 400, pas italic, majuscules, très grand */
+.hero-name-line {
+    display: block;
     font-family: var(--serif);
-    font-size: clamp(96px, 12vw, 160px);
+    font-style: normal;           /* carton-titre : pas italic */
+    font-weight: 400;
+    font-size: clamp(120px, 14vw, 200px);
+    text-transform: uppercase;
+    color: var(--cream);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    will-change: transform;
+}
+
+/* Ligne 1 : "THOMAS" + mot rotatif côte à côte, alignés baseline */
+.hero-title-row1 {
+    display: flex;
+    align-items: baseline;
+    gap: 32px;
+}
+
+/* Ligne 2 : "DOUDET" indenté vers la droite */
+.hero-title-row2 {
+    margin-left: 15vw;
+}
+
+/* Mot rotatif — serif italic léger, sous-titre de générique */
+.hero-role {
+    position: relative;
+    height: clamp(26px, 3vw, 42px);
+    overflow: hidden;
+    font-family: var(--serif);
+    font-size: clamp(26px, 3vw, 42px);
     font-style: italic;
     font-weight: 300;
-    line-height: 1.1;
-    margin-bottom: 40px;
-    letter-spacing: -0.02em;
-}
-
-.hero-role {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 60px;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
+    color: var(--cream);
+    opacity: 0.6;
+    min-width: 220px;
+    align-self: flex-end;
+    padding-bottom: 10px; /* descend légèrement sous la baseline de THOMAS */
 }
 
 .role-item {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    white-space: nowrap;
+}
+
+/* Scroll indicator — bas centre */
+.hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 2;
+    opacity: 0; /* GSAP anime l'entrée */
+}
+
+.hero-scroll-label {
+    font-family: var(--sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--line-num);
+}
+
+.hero-scroll-bar {
+    width: 1px;
+    height: 40px;
+    background: var(--line-num);
+    overflow: hidden;
     position: relative;
 }
 
-.role-item:not(:last-child)::after {
-    content: '•';
+.hero-scroll-bar::after {
+    content: '';
     position: absolute;
-    right: -12px;
-    top: 0;
-}
-
-.hero-quote {
-    font-family: var(--serif);
-    font-size: 24px;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--muted);
-    margin-bottom: 40px;
-    line-height: 1.5;
-}
-
-.hero-line {
-    width: 80px;
-    height: 1px;
+    top: -40%;
+    left: 0;
+    width: 100%;
+    height: 40%;
     background: var(--cream);
-    margin: 40px auto 0;
-    opacity: 0.5;
+    animation: scrollDrop 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollDrop {
+    0%   { top: -40%; }
+    100% { top: 140%; }
+}
+
+/* Grain overlay */
+.hero-grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .hero-grain::before {
@@ -523,66 +654,94 @@ main {
 }
 
 /* ===================================
-   PROJECTS GALLERY SECTION
+   PROJECTS SECTION
    =================================== */
 .projects {
-    padding: 120px 80px;
-    background: var(--bg);
-    position: relative;
-    z-index: 10;
-}
-
-.projects-title {
-    font-family: var(--serif);
-    font-size: clamp(36px, 8vw, 72px);
-    font-style: italic;
-    font-weight: 300;
-    text-align: center;
-    margin-bottom: 80px;
-}
-
-.gallery-horizontal-container {
-    overflow: hidden;
-    position: relative;
-}
-
-.gallery-horizontal {
+    height: 100vh;
     display: flex;
-    gap: 24px;
-    width: max-content;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 130px 80px 48px;
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
 }
 
-.project-card {
-    min-width: 400px;
-    flex-shrink: 0;
+/* Background — couches par projet, GSAP cross-fade au hover */
+.projects-bg-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
 }
 
-.project-image {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    background: var(--accent);
-    margin-bottom: 16px;
-    border: 1px solid var(--accent);
-    transition: transform 0.3s ease;
+.project-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
 }
 
-.project-card:hover .project-image {
-    transform: scale(1.02);
+.projects-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 14, 26, 0.62);
+    z-index: 1;
 }
 
-.project-title {
+/* Liste verticale — right-aligned, dimmed par défaut */
+.projects-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: right;
+    position: relative;
+    z-index: 2;
+}
+
+/* Quand on survole la liste, tous se dimuent */
+.projects-list:hover .project-item-link {
+    opacity: 0.18;
+}
+
+/* L'item survolé revient à pleine opacité */
+.project-item:hover .project-item-link {
+    opacity: 1;
+}
+
+/* Lien — titre du projet */
+.project-item-link {
+    display: block;
     font-family: var(--serif);
-    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 80px);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.32;
+    transition: opacity 0.3s ease;
+    line-height: 1.05;
+}
+
+/* Premier projet actif par défaut */
+.project-item.active .project-item-link {
+    opacity: 1;
+}
+
+/* "Mes Projets" — huge italic, bas de section comme dans le Figma */
+.projects-heading {
+    font-family: var(--serif);
     font-style: italic;
     font-weight: 300;
-    margin-bottom: 8px;
-}
-
-.project-meta {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
+    font-size: clamp(60px, 20vw, 346px);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    color: var(--cream);
+    position: relative;
+    z-index: 2;
 }
 
 /* ===================================
@@ -731,15 +890,44 @@ main {
     }
 
     .hero {
-        padding: 40px;
-        margin-top: 60px;
+        padding: 0 32px;
+    }
+
+    .hero-name-line {
+        font-size: clamp(72px, 16vw, 120px);
+    }
+
+    .hero-title-row2 {
+        margin-left: 12vw;
+    }
+
+    .hero-role {
+        font-size: clamp(18px, 4vw, 28px);
+        height: clamp(18px, 4vw, 28px);
     }
 
     .statement,
     .about,
-    .projects,
     .contact {
         padding: 80px 40px;
+    }
+
+    .projects {
+        padding: 100px 32px 32px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .projects-list {
+        gap: 8px;
+    }
+
+    .project-item-link {
+        font-size: clamp(28px, 7vw, 52px);
+    }
+
+    .projects-heading {
+        font-size: clamp(48px, 18vw, 160px);
     }
 
     .about-container {
@@ -793,4 +981,183 @@ main {
         width: 100%;
         height: auto;
     }
+}
+
+
+/* =====================================================
+   PAGE: TRAVAUX — Full-viewport project showcase
+   ===================================================== */
+
+/* Lock page to 100vh — no page scroll */
+body.page-travaux {
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* ── Cinematic backgrounds ── */
+.travaux-bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+.travaux-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity;
+}
+
+/* ── Left-to-right gradient overlay ──
+   Left (list side): dark & readable
+   Right (image side): transparent, image breathes */
+.travaux-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+        to right,
+        rgba(10, 14, 26, 0.88) 0%,
+        rgba(10, 14, 26, 0.72) 30%,
+        rgba(10, 14, 26, 0.35) 58%,
+        rgba(10, 14, 26, 0.15) 100%
+    );
+}
+
+/* ── Main layout container ── */
+.travaux-main {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* ── Left column: list + heading ── */
+.travaux-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 55%;
+    height: 100%;
+    pointer-events: all;
+}
+
+/* ── Scrollable project list ──
+   Occupies space between nav and the decorative heading */
+.project-list {
+    position: absolute;
+    top: 112px;
+    left: 80px;
+    right: 0;
+    bottom: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    list-style: none;
+    padding: 0;
+    scrollbar-width: none;
+}
+.project-list::-webkit-scrollbar { display: none; }
+
+/* ── Project row ── */
+.project-item {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 13px 0;
+    text-decoration: none;
+    color: inherit;
+    will-change: opacity;
+}
+
+/* Title: large serif italic */
+.project-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(38px, 3.6vw, 54px);
+    color: var(--cream);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+}
+
+/* Year: small uppercase Space Grotesk */
+.project-year {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    flex-shrink: 0;
+    padding-bottom: 2px;
+}
+
+/* ── Decorative H1 at bottom-left ── */
+.travaux-heading {
+    position: absolute;
+    bottom: 52px;
+    left: 80px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(88px, 9vw, 130px);
+    color: var(--cream);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    opacity: 0.13;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ── Right-side project count label ── */
+.travaux-right-label {
+    position: fixed;
+    right: 80px;
+    bottom: 80px;
+    z-index: 11;
+    pointer-events: none;
+}
+
+.travaux-count {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--line-num);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+/* ── Active project name shown on the right ── */
+.travaux-active-label {
+    position: fixed;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 11;
+    pointer-events: none;
+    text-align: right;
+}
+
+.travaux-active-category {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+}
+
+.travaux-active-index {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 72px;
+    color: var(--cream);
+    line-height: 1;
+    opacity: 0.08;
 }

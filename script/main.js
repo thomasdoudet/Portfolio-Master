@@ -33,41 +33,46 @@ document.addEventListener('mouseenter', () => {
 });
 
 // ========================================
-// Hero Title Animation
+// Hero Title Animation — two-line slide-up
 // ========================================
-const heroTitle = document.querySelector('.hero-title');
-if (heroTitle) {
-    gsap.from(heroTitle, {
-        opacity: 0,
-        y: 40,
-        duration: 1,
-        ease: 'power3.out'
+const heroNameLines = document.querySelectorAll('.hero-name-line');
+if (heroNameLines.length > 0) {
+    gsap.from(heroNameLines, {
+        yPercent: 110,    /* slide up depuis le bas du clip */
+        duration: 1.1,
+        ease: 'power4.out',
+        stagger: 0.13,
     });
 }
 
+// Scroll indicator — apparaît après le nom
+gsap.to('.hero-scroll', {
+    opacity: 1,
+    duration: 0.9,
+    ease: 'power3.out',
+    delay: 1.0,
+});
+
 // ========================================
-// Hero Role Rotation
+// Hero Role Rotation — mot vertical, une entrée à la fois
 // ========================================
 const roleItems = document.querySelectorAll('.role-item');
-if (roleItems.length > 0) {
-    const timeline = gsap.timeline({ repeat: -1 });
-    
-    roleItems.forEach((item, index) => {
-        if (index > 0) {
-            timeline.to(roleItems[index - 1], {
-                opacity: 0,
-                y: -20,
-                duration: 0.5
-            }, '1');
-            
-            timeline.fromTo(item, 
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.5 },
-                '<'
-            );
-            
-            timeline.to({}, {}, '+=2');
-        }
+if (roleItems.length > 1) {
+    // Cacher tous sauf le premier
+    gsap.set(roleItems, (i) => ({
+        opacity: i === 0 ? 1 : 0,
+        y:       i === 0 ? 0 : 18,
+    }));
+
+    const tl = gsap.timeline({ repeat: -1, delay: 2.4 });
+    roleItems.forEach((item, i) => {
+        const next = roleItems[(i + 1) % roleItems.length];
+        tl.to(item, { opacity: 0, y: -18, duration: 0.38, ease: 'power2.in' }, '+=2.2');
+        tl.fromTo(next,
+            { opacity: 0, y: 18 },
+            { opacity: 1, y: 0,  duration: 0.38, ease: 'power2.out' },
+            '<+0.05'
+        );
     });
 }
 
@@ -130,25 +135,72 @@ if (marqueeContent) {
 }
 
 // ========================================
-// Horizontal Gallery Animation
+// Projects — reveals staggerés au scroll
 // ========================================
-const gallery = document.querySelector('.gallery-horizontal');
-if (gallery) {
-    gsap.registerPlugin(ScrollTrigger);
-    
-    gsap.to(gallery, {
-        scrollTrigger: {
-            trigger: '.projects',
-            start: 'bottom 10%',
-            end: 'bottom -50%',
-            scrub: 1,
-            markers: false
-        },
-        x: -500,
-        duration: 3,
-        ease: 'power1.inOut'
+const projectItems = document.querySelectorAll('.project-item');
+if (projectItems.length > 0) {
+    // Les titres glissent depuis la droite, staggerés
+    projectItems.forEach((item, i) => {
+        gsap.from(item, {
+            opacity: 0,
+            x: 60,
+            duration: 0.8,
+            ease: 'power3.out',
+            delay: i * 0.09,
+            scrollTrigger: {
+                trigger: '.projects-list',
+                start: 'top 80%',
+                toggleActions: 'play none none none',
+            },
+        });
     });
 }
+
+// "Mes Projets" — slide up depuis le bas
+gsap.from('.projects-heading', {
+    opacity: 0,
+    y: 60,
+    duration: 1.0,
+    ease: 'power3.out',
+    scrollTrigger: {
+        trigger: '.projects',
+        start: 'top 60%',
+        toggleActions: 'play none none none',
+    },
+});
+
+// ========================================
+// Projects — cross-fade image de fond au hover
+// ========================================
+(function () {
+    const projectBgs  = document.querySelectorAll('.project-bg');
+    const projectList = document.getElementById('js-projects-list');
+    if (!projectBgs.length || !projectList) return;
+
+    let currentBg = -1; // -1 = aucune image visible
+
+    function activateBg(index) {
+        if (index === currentBg) return;
+        if (currentBg !== -1) {
+            gsap.to(projectBgs[currentBg], { opacity: 0, duration: 0.7, ease: 'power2.inOut' });
+        }
+        gsap.to(projectBgs[index], { opacity: 1, duration: 0.7, ease: 'power2.inOut' });
+        currentBg = index;
+    }
+
+    function resetBg() {
+        if (currentBg === -1) return;
+        gsap.to(projectBgs[currentBg], { opacity: 0, duration: 0.55, ease: 'power2.inOut' });
+        currentBg = -1;
+    }
+
+    document.querySelectorAll('.project-item').forEach((item) => {
+        const index = parseInt(item.getAttribute('data-index'), 10);
+        item.addEventListener('mouseenter', () => activateBg(index));
+    });
+
+    projectList.addEventListener('mouseleave', resetBg);
+}());
 
 // ========================================
 // Parcours Horizontal Scroll + Parallax

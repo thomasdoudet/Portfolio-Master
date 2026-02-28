@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travaux — Thomas Doudet</title>
+
+    <!-- Google Fonts: Cormorant Garamond + Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- GSAP (no ScrollTrigger needed on this page) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-travaux">
+
+    <!-- Construction grid (shared across all pages) -->
+    <script src="script/grid.js"></script>
+
+    <!-- Custom cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-ring"></div>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="logo" style="text-decoration:none;color:inherit;">Thomas Doudet</a>
+            <nav class="nav-links">
+                <a href="index.html">Accueil</a>
+                <a href="travaux.html" style="color:var(--cream);">Travaux</a>
+                <a href="index.html#about">À propos</a>
+                <a href="index.html#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ── Cinematic background layers ──
+         One per project. GSAP fades between them on hover.
+         Replace linear-gradient with a real background-image on the live site. -->
+    <div class="travaux-bg-layer" aria-hidden="true">
+
+        <!-- 01 · Nocturne — blue-night (default visible) -->
+        <div class="travaux-bg" data-bg="0"
+             style="background: radial-gradient(ellipse at 70% 40%, #162040 0%, #0a1228 45%, #060913 100%);"></div>
+
+        <!-- 02 · Resonance — warm amber-ember -->
+        <div class="travaux-bg" data-bg="1"
+             style="background: radial-gradient(ellipse at 65% 35%, #2d1808 0%, #1a0d06 50%, #0e0604 100%);"></div>
+
+        <!-- 03 · Atelier Noir — charcoal, almost monochrome -->
+        <div class="travaux-bg" data-bg="2"
+             style="background: radial-gradient(ellipse at 60% 45%, #1e1e1e 0%, #101010 50%, #080808 100%);"></div>
+
+        <!-- 04 · Silhouettes — cool midnight blue -->
+        <div class="travaux-bg" data-bg="3"
+             style="background: radial-gradient(ellipse at 70% 30%, #0e1c2e 0%, #091522 50%, #050e18 100%);"></div>
+
+        <!-- 05 · Horizons — golden dusk -->
+        <div class="travaux-bg" data-bg="4"
+             style="background: radial-gradient(ellipse at 60% 55%, #2e1a04 0%, #1c1003 50%, #100903 100%);"></div>
+
+        <!-- 06 · Fragments — deep teal forest -->
+        <div class="travaux-bg" data-bg="5"
+             style="background: radial-gradient(ellipse at 65% 40%, #0c2420 0%, #071a16 50%, #040e0c 100%);"></div>
+
+    </div>
+
+    <!-- Gradient overlay: left=dark+readable · right=image shows through -->
+    <div class="travaux-overlay" aria-hidden="true"></div>
+
+    <!-- Right-side decorative index number -->
+    <div class="travaux-active-label" aria-hidden="true">
+        <div class="travaux-active-index" id="js-active-index">01</div>
+    </div>
+
+    <!-- Project count, bottom-right -->
+    <div class="travaux-right-label" aria-hidden="true">
+        <div class="travaux-count">06 projets</div>
+    </div>
+
+    <!-- ── Main layout ── -->
+    <main class="travaux-main">
+        <div class="travaux-left">
+
+            <!-- Scrollable project list -->
+            <ul class="project-list" id="js-project-list" role="list">
+
+                <li><a class="project-item" href="#" data-index="0">
+                    <span class="project-title">Nocturne</span>
+                    <span class="project-year">2025</span>
+                </a></li>
+
+                <li><a class="project-item" href="#" data-index="1">
+                    <span class="project-title">Resonance</span>
+                    <span class="project-year">2025</span>
+                </a></li>
+
+                <li><a class="project-item" href="#" data-index="2">
+                    <span class="project-title">Atelier Noir</span>
+                    <span class="project-year">2024</span>
+                </a></li>
+
+                <li><a class="project-item" href="#" data-index="3">
+                    <span class="project-title">Silhouettes</span>
+                    <span class="project-year">2024</span>
+                </a></li>
+
+                <li><a class="project-item" href="#" data-index="4">
+                    <span class="project-title">Horizons</span>
+                    <span class="project-year">2024</span>
+                </a></li>
+
+                <li><a class="project-item" href="#" data-index="5">
+                    <span class="project-title">Fragments</span>
+                    <span class="project-year">2023</span>
+                </a></li>
+
+            </ul>
+
+            <!-- Decorative H1 — pinned bottom-left, large + low opacity -->
+            <h1 class="travaux-heading" aria-label="Mes Projets">Mes Projets</h1>
+
+        </div>
+    </main>
+
+    <script>
+    (function () {
+        /* ── Elements ── */
+        const items    = document.querySelectorAll('.project-item');
+        const bgs      = document.querySelectorAll('.travaux-bg');
+        const indexEl  = document.getElementById('js-active-index');
+        const list     = document.getElementById('js-project-list');
+        const cursor      = document.querySelector('.cursor');
+        const cursorRing  = document.querySelector('.cursor-ring');
+
+        /* ── State ── */
+        let current = 0;
+
+        /* ── Helpers ── */
+        function pad(n) { return n < 10 ? '0' + (n + 1) : '' + (n + 1); }
+
+        function activateProject(index) {
+            if (index === current) return;
+
+            /* Cross-fade backgrounds */
+            gsap.to(bgs[current], { opacity: 0, duration: 0.75, ease: 'power2.inOut' });
+            gsap.to(bgs[index],   { opacity: 1, duration: 0.75, ease: 'power2.inOut' });
+
+            /* Dim all titles — brighten the hovered one */
+            items.forEach(function (item, i) {
+                gsap.to(item, {
+                    opacity: i === index ? 1 : 0.25,
+                    duration: 0.35,
+                    ease: 'power2.out'
+                });
+            });
+
+            /* Update decorative index number */
+            gsap.to(indexEl, {
+                opacity: 0,
+                duration: 0.15,
+                onComplete: function () {
+                    indexEl.textContent = pad(index);
+                    gsap.to(indexEl, { opacity: 1, duration: 0.25 });
+                }
+            });
+
+            current = index;
+        }
+
+        function resetToDefault() {
+            /* Fade back to Nocturne */
+            gsap.to(bgs[current], { opacity: 0, duration: 0.6, ease: 'power2.inOut' });
+            gsap.to(bgs[0],       { opacity: 1, duration: 0.6, ease: 'power2.inOut' });
+
+            /* Restore default opacities */
+            items.forEach(function (item, i) {
+                gsap.to(item, {
+                    opacity: i === 0 ? 0.75 : 0.42,
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+            });
+
+            gsap.to(indexEl, {
+                opacity: 0,
+                duration: 0.15,
+                onComplete: function () {
+                    indexEl.textContent = '01';
+                    gsap.to(indexEl, { opacity: 1, duration: 0.25 });
+                }
+            });
+
+            current = 0;
+        }
+
+        /* ── Initial state ── */
+        /* Backgrounds: Nocturne starts visible */
+        bgs.forEach(function (bg, i) {
+            gsap.set(bg, { opacity: i === 0 ? 1 : 0 });
+        });
+
+        /* Items start hidden for entrance animation */
+        gsap.set(items, { opacity: 0, y: 18 });
+        gsap.set('.travaux-heading', { opacity: 0, y: 24 });
+        gsap.set(indexEl, { opacity: 0 });
+
+        /* ── Entrance animation ── */
+        gsap.to(items, {
+            opacity: 0.42,
+            y: 0,
+            stagger: 0.09,
+            duration: 0.85,
+            ease: 'power3.out',
+            delay: 0.3,
+            onComplete: function () {
+                /* First item slightly brighter (it's the "active" default) */
+                gsap.set(items[0], { opacity: 0.75 });
+            }
+        });
+
+        gsap.to('.travaux-heading', {
+            opacity: 0.13,
+            y: 0,
+            duration: 1.1,
+            ease: 'power3.out',
+            delay: 0.7
+        });
+
+        gsap.to(indexEl, {
+            opacity: 1,
+            duration: 0.8,
+            delay: 0.9
+        });
+
+        /* ── Hover events ── */
+        items.forEach(function (item, i) {
+            item.addEventListener('mouseenter', function () { activateProject(i); });
+        });
+
+        list.addEventListener('mouseleave', resetToDefault);
+
+        /* ── Custom cursor ── */
+        document.addEventListener('mousemove', function (e) {
+            gsap.to(cursor,     { x: e.clientX, y: e.clientY, duration: 0.1 });
+            gsap.to(cursorRing, { x: e.clientX, y: e.clientY, duration: 0.3 });
+        });
+
+        document.addEventListener('mouseleave', function () {
+            gsap.to([cursor, cursorRing], { opacity: 0, duration: 0.3 });
+        });
+
+        document.addEventListener('mouseenter', function () {
+            gsap.to([cursor, cursorRing], { opacity: 1, duration: 0.3 });
+        });
+
+        /* Scale cursor ring on project links */
+        items.forEach(function (item) {
+            item.addEventListener('mouseenter', function () {
+                gsap.to(cursorRing, { scale: 2.5, duration: 0.4, ease: 'power2.out' });
+            });
+            item.addEventListener('mouseleave', function () {
+                gsap.to(cursorRing, { scale: 1, duration: 0.4, ease: 'power2.out' });
+            });
+        });
+
+    }());
+    </script>
+
+</body>
+</html>

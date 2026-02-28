@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thomas Doudet — Portfolio Audiovisuel</title>
+    <title>Thomas Doudet — Portfolio</title>
     
     <!-- Google Fonts: Cormorant Garamond (serif italic) + Space Grotesk (sans-serif) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,300;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- GSAP CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -17,14 +17,8 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Grid lines -->
-    <div class="grid-lines">
-        <div class="grid-line" style="--line-pos: 16.67%"><span class="grid-num">01</span></div>
-        <div class="grid-line" style="--line-pos: 33.33%"><span class="grid-num">02</span></div>
-        <div class="grid-line" style="--line-pos: 50%"><span class="grid-num">03</span></div>
-        <div class="grid-line" style="--line-pos: 66.67%"><span class="grid-num">04</span></div>
-        <div class="grid-line" style="--line-pos: 83.33%"><span class="grid-num">05</span></div>
-    </div>
+    <!-- Construction grid — injected via script/grid.js (reuse on all pages) -->
+    <script src="script/grid.js"></script>
 
     <!-- Custom cursor -->
     <div class="cursor"></div>
@@ -45,17 +39,43 @@
     <main>
         <!-- SECTION 1: HERO -->
         <section id="hero" class="hero">
-            <div class="hero-content">
-                <h1 class="hero-title reveal">Thomas Doudet</h1>
-                <div class="hero-role">
-                    <span class="role-item">Vidéaste</span>
-                    <span class="role-item">Designer</span>
-                    <span class="role-item">Créateur</span>
-                </div>
-                <p class="hero-quote reveal">« L'image raconte une histoire, le mouvement la vie »</p>
-                <div class="hero-line reveal"></div>
-            </div>
+            <!-- Background placeholder — tons chauds (remplacer par vraie photo) -->
+            <div class="hero-bg"></div>
+            <div class="hero-bg-overlay"></div>
+
+            <!-- Grain overlay -->
             <div class="hero-grain"></div>
+
+            <div class="hero-content">
+                <!-- Titre cinématique deux lignes — carton-titre de film -->
+                <h1 class="hero-title">
+                    <!-- Ligne 1 : THOMAS + mot rotatif à sa droite -->
+                    <div class="hero-title-row1">
+                        <div class="hero-name-clip">
+                            <span class="hero-name-line">Thomas</span>
+                        </div>
+                        <!-- Mot rotatif — italic léger, flotte entre les deux lignes -->
+                        <div class="hero-role">
+                            <span class="role-item">Créateur</span>
+                            <span class="role-item">Directeur</span>
+                            <span class="role-item">Producteur</span>
+                            <span class="role-item">Développeur</span>
+                        </div>
+                    </div>
+                    <!-- Ligne 2 : DOUDET décalé vers la droite -->
+                    <div class="hero-title-row2">
+                        <div class="hero-name-clip">
+                            <span class="hero-name-line">Doudet</span>
+                        </div>
+                    </div>
+                </h1>
+            </div>
+
+            <!-- Scroll indicator — bas centre -->
+            <div class="hero-scroll">
+                <span class="hero-scroll-label">Scroll</span>
+                <div class="hero-scroll-bar"></div>
+            </div>
         </section>
 
         <!-- SECTION 2: STATEMENT (First) -->
@@ -207,61 +227,65 @@
             </div>
         </section>
 
-        <!-- SECTION 5: PROJECTS GALLERY -->
+        <!-- SECTION 5: PROJECTS -->
         <section id="projects" class="projects">
-            <div class="eyebrow reveal">Projets sélectionnés</div>
-            <h2 class="projects-title reveal">Travaux récents</h2>
-            
-            <div class="gallery-horizontal-container">
-                <div class="gallery-horizontal reveal">
-                    <div class="project-card">
-                        <div class="project-image" style="background: linear-gradient(135deg, #1E2233 0%, #2A3050 100%);"></div>
-                        <h3 class="project-title">La Cérémonie des Walid</h3>
-                        <p class="project-meta">Production Live • 2025</p>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-image" style="background: linear-gradient(135deg, #2A3050 0%, #1A1F30 100%);"></div>
-                        <h3 class="project-title">Trailer Le Studio</h3>
-                        <p class="project-meta">Vidéo • 2025</p>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-image" style="background: linear-gradient(135deg, #1A1F30 0%, #2A3F50 100%);"></div>
-                        <h3 class="project-title">Sweat MMI — We Are Walid</h3>
-                        <p class="project-meta">Design Graphique • 2025</p>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-image" style="background: linear-gradient(135deg, #2A3F50 0%, #1E2233 100%);"></div>
-                        <h3 class="project-title">Sweat MMI — Walid's World</h3>
-                        <p class="project-meta">Design Graphique • 2024</p>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-image" style="background: linear-gradient(135deg, #1F2A3F 0%, #2A3050 100%);"></div>
-                        <h3 class="project-title">Shootings Inter-BDE</h3>
-                        <p class="project-meta">Photographie • 2024</p>
-                    </div>
-                </div>
+            <!-- Couches de fond — une par projet, GSAP cross-fade au hover -->
+            <div class="projects-bg-layer" aria-hidden="true">
+                <div class="project-bg" data-bg="0"
+                     style="background-image: url('images/ceremoniedeswalid.webp');"></div>
+                <div class="project-bg" data-bg="1"
+                     style="background-image: url('images/lestudio-trailer.webp');"></div>
+                <div class="project-bg" data-bg="2"
+                     style="background-image: url('images/sweatmmi.webp');"></div>
+                <div class="project-bg" data-bg="3"
+                     style="background-image: url('images/sweatmmi.webp'); background-position: center 30%;"></div>
+                <div class="project-bg" data-bg="4"
+                     style="background-image: url('images/IMG_1294.webp');"></div>
             </div>
+            <div class="projects-bg-overlay"></div>
+
+            <!-- Liste des projets — verticale, right-aligned comme la frame Figma -->
+            <ul class="projects-list" id="js-projects-list">
+                <li class="project-item active" data-index="0">
+                    <a href="#" class="project-item-link">La Cérémonie des Walid</a>
+                </li>
+                <li class="project-item" data-index="1">
+                    <a href="#" class="project-item-link">Trailer Le Studio</a>
+                </li>
+                <li class="project-item" data-index="2">
+                    <a href="#" class="project-item-link">Sweat MMI — We Are Walid</a>
+                </li>
+                <li class="project-item" data-index="3">
+                    <a href="#" class="project-item-link">Sweat MMI — Walid's World</a>
+                </li>
+                <li class="project-item" data-index="4">
+                    <a href="#" class="project-item-link">Shootings Inter-BDE</a>
+                </li>
+            </ul>
+
+            <!-- "Mes Projets" — titre décoratif italic en bas comme dans le Figma -->
+            <p class="projects-heading">Mes Projets</p>
         </section>
 
         <!-- SECTION 5: MARQUEE -->
         <section class="marquee-section">
             <div class="marquee reveal">
                 <div class="marquee-content">
-                    <span>CINÉMA</span>
+                    <span>DESIGN</span>
+                    <span>·</span>
+                    <span>LIVE</span>
+                    <span>·</span>
+                    <span>WEB</span>
+                    <span>·</span>
+                    <span>CRÉATION</span>
+                    <span>·</span>
+                    <span>PRODUCTION</span>
                     <span>·</span>
                     <span>ÉMOTION</span>
                     <span>·</span>
                     <span>ART</span>
                     <span>·</span>
-                    <span>CRÉATION</span>
-                    <span>·</span>
-                    <span>CINÉMA</span>
-                    <span>·</span>
-                    <span>ÉMOTION</span>
-                    <span>·</span>
-                    <span>ART</span>
-                    <span>·</span>
-                    <span>CRÉATION</span>
+                    <span>COMMUNICATION</span>
                 </div>
             </div>
         </section>
