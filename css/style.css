@@ -152,10 +152,11 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 40px 80px;
-    background: var(--bg);
+    padding: 20px 80px;
+    background: transparent;
     z-index: 1000;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid transparent;
+    will-change: transform;
 }
 
 .navbar-container {
@@ -516,141 +517,143 @@ main {
 /* ===================================
    PARCOURS SECTION (Horizontal Scroll)
    =================================== */
+
+/* Section height = 100vh, GSAP ajoute l'espace de scroll via pin */
 .parcours {
-    padding: 120px 80px;
-    background: var(--bg);
+    height: 100vh;
+    overflow: hidden;
     position: relative;
+    background: var(--bg);
     z-index: 10;
 }
 
-.parcours-intro {
-    text-align: center;
-    margin-bottom: 100px;
+/* "Parcours" watermark — centré absolument, z-index bas */
+.parcours-hero {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    pointer-events: none;
 }
 
-.parcours-title {
+.parcours-hero-text {
     font-family: var(--serif);
-    font-size: clamp(36px, 8vw, 72px);
+    font-size: clamp(140px, 22vw, 320px);
     font-style: italic;
     font-weight: 300;
-    margin-bottom: 40px;
+    color: var(--cream);   /* état initial — GSAP anime vers rgba(245,230,200,0.25) */
+    white-space: nowrap;
+    will-change: color;
 }
 
-.parcours-line {
-    width: 120px;
-    height: 1px;
-    background: var(--cream);
-    margin: 0 auto;
-    opacity: 0.5;
-}
-
-/* Horizontal scroll container */
-.parcours-scroll-container {
-    position: relative;
-    width: 100%;
+/* Wrapper — clippe le track */
+.parcours-track-wrap {
+    position: absolute;
+    inset: 0;
     overflow: hidden;
-    margin: 0 -80px;
-    padding: 0 80px;
+    z-index: 2;
 }
 
+/* Track horizontal */
 .parcours-track {
     display: flex;
-    gap: 80px;
+    align-items: center;
+    height: 100%;
     width: max-content;
+    will-change: transform;
 }
 
-/* Bloc styling */
+/* ---- Carte individuelle — une par viewport ---- */
 .parcours-bloc {
     flex-shrink: 0;
-    width: 360px;
-    padding: 60px 0;
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
 }
 
-.parcours-bloc-main {
-    width: 420px;
+/* Wrapper interne — flex colonne : image en haut, textes en bas */
+.parcours-bloc-inner {
+    flex-shrink: 0;
+    width: 70vw;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: 280px;
+    position: relative;
 }
 
-.parcours-year {
-    font-family: var(--sans);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--line-num);
-    margin-bottom: 20px;
-    font-weight: 500;
+/* Image — format 4:3, positionnée dans le flux */
+.parcours-bloc-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--accent);
+    flex-shrink: 0;
 }
 
-.parcours-separator {
-    width: 1px;
-    height: 40px;
-    background: var(--line);
-    margin-bottom: 40px;
+/* Gradient overlay bas de l'image */
+.parcours-bloc-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(10, 14, 26, 0.9) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.parcours-img-ph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    will-change: transform;
+}
+
+/* Textes — chevauchent légèrement le bas de l'image */
+.parcours-bloc-texts {
+    margin-top: -28px;
+    position: relative;
+    z-index: 2;
+    will-change: transform;
 }
 
 .parcours-bloc-title {
     font-family: var(--serif);
-    font-size: 100px;
+    font-size: clamp(64px, 7vw, 92px);
     font-style: italic;
     font-weight: 300;
-    line-height: 0.9;
-    margin-bottom: 20px;
-    will-change: transform;
+    line-height: 0.88;
+    color: var(--cream);
+    margin-bottom: 14px;
 }
 
-.parcours-bloc-title-main {
-    font-size: 120px;
-}
-
-.parcours-bloc-subtitle {
+.parcours-bloc-year {
     font-family: var(--sans);
-    font-size: 14px;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    margin-bottom: 40px;
+    letter-spacing: 0.2em;
+    color: var(--line-num);
+    margin-bottom: 10px;
     font-weight: 400;
 }
 
 .parcours-bloc-text {
-    font-size: 15px;
-    line-height: 1.6;
+    font-size: 14px;
+    line-height: 1.65;
     color: var(--muted);
-    margin-bottom: 40px;
-    max-width: 320px;
-    will-change: transform;
-}
-
-.parcours-images {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.parcours-image {
-    border: 1px solid var(--accent);
-    will-change: transform;
-}
-
-.parcours-image-1 {
-    width: 280px;
-    height: 180px;
-    aspect-ratio: auto;
-}
-
-.parcours-image-2 {
-    width: 300px;
-    height: 160px;
-}
-
-.parcours-image-wide {
-    width: 360px;
-    height: 200px;
-}
-
-.parcours-image-cinema {
-    width: 340px;
-    height: 190px;
+    max-width: 480px;
 }
 
 /* ===================================
@@ -661,7 +664,7 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 130px 80px 48px;
+    padding: 2rem;
     position: relative;
     background: var(--bg);
     overflow: hidden;
@@ -689,39 +692,29 @@ main {
     z-index: 1;
 }
 
-/* Liste verticale — right-aligned, dimmed par défaut */
+/* Liste verticale — right-aligned */
 .projects-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    align-items: flex-end;
+    gap: 24px;
     text-align: right;
     position: relative;
     z-index: 2;
 }
 
-/* Quand on survole la liste, tous se dimuent */
-.projects-list:hover .project-item-link {
-    opacity: 0.18;
-}
-
-/* L'item survolé revient à pleine opacité */
-.project-item:hover .project-item-link {
-    opacity: 1;
-}
-
 /* Lien — titre du projet */
 .project-item-link {
     display: block;
-    font-family: var(--serif);
+    font-family: var(--sans);
     font-style: normal;
-    font-weight: 400;
-    font-size: clamp(36px, 5vw, 80px);
-    text-transform: uppercase;
-    letter-spacing: -0.03em;
+    font-weight: 500;
+    font-size: clamp(28px, 3.5vw, 56px);
+    letter-spacing: -0.02em;
     color: var(--cream);
     text-decoration: none;
-    opacity: 0.32;
+    opacity: 1;
     transition: opacity 0.3s ease;
     line-height: 1.05;
 }
@@ -732,16 +725,18 @@ main {
 }
 
 /* "Mes Projets" — huge italic, bas de section comme dans le Figma */
+/* font-size calculée dynamiquement par JS pour remplir exactement la largeur */
 .projects-heading {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(60px, 20vw, 346px);
-    line-height: 0.88;
+    font-size: 20vw; /* fallback avant que JS tourne */
+    line-height: normal;
     letter-spacing: -0.03em;
     color: var(--cream);
     position: relative;
     z-index: 2;
+    white-space: nowrap;
 }
 
 /* ===================================
@@ -886,7 +881,7 @@ main {
    =================================== */
 @media (max-width: 768px) {
     .navbar {
-        padding: 20px 40px;
+        padding: 14px 32px;
     }
 
     .hero {
@@ -919,16 +914,13 @@ main {
     }
 
     .projects-list {
-        gap: 8px;
+        gap: 20px;
     }
 
     .project-item-link {
-        font-size: clamp(28px, 7vw, 52px);
+        font-size: clamp(22px, 6vw, 40px);
     }
 
-    .projects-heading {
-        font-size: clamp(48px, 18vw, 160px);
-    }
 
     .about-container {
         grid-template-columns: 1fr;
@@ -1067,7 +1059,6 @@ body.page-travaux {
     display: flex;
     align-items: baseline;
     gap: 18px;
-    padding: 13px 0;
     text-decoration: none;
     color: inherit;
     will-change: opacity;
