@@ -57,12 +57,16 @@
                         <div class="hero-name-clip">
                             <span class="hero-name-line">Thomas</span>
                         </div>
-                        <!-- Mot rotatif — italic léger, flotte entre les deux lignes -->
+                        <!-- Mot rotatif — sliding vertical: wrapper > inner (duplicate first at end) -->
                         <div class="hero-role">
-                            <span class="role-item">Créateur</span>
-                            <span class="role-item">Directeur</span>
-                            <span class="role-item">Producteur</span>
-                            <span class="role-item">Développeur</span>
+                            <div class="role-inner">
+                                <span class="role-item">Designer</span>
+                                <span class="role-item">Filmmaker</span>
+                                <span class="role-item">Developer</span>
+                                <span class="role-item">Photographer</span>
+                                <!-- duplicate first item to allow seamless loop -->
+                                <span class="role-item">Designer</span>
+                            </div>
                         </div>
                     </div>
                     <!-- Ligne 2 : DOUDET décalé vers la droite -->
@@ -138,8 +142,10 @@
                     <div class="parcours-bloc">
                         <div class="parcours-bloc-inner">
                             <div class="parcours-bloc-img">
-                                <img class="parcours-img-ph"
-                                     src="images/parcours-descartes.webp" alt="Lycée Descartes">
+                                <div class="parcours-img-wrap">
+                                    <img class="parcours-img-ph"
+                                         src="images/parcours-descartes.webp" alt="Lycée Descartes">
+                                </div>
                             </div>
                             <div class="parcours-bloc-texts">
                                 <h3 class="parcours-bloc-title">Lycée</h3>
@@ -153,8 +159,10 @@
                     <div class="parcours-bloc">
                         <div class="parcours-bloc-inner">
                             <div class="parcours-bloc-img">
-                                <img class="parcours-img-ph"
-                                     src="images/parcours-lannion.webp" alt="IUT de Lannion — BUT R&T">
+                                <div class="parcours-img-wrap">
+                                    <img class="parcours-img-ph"
+                                         src="images/parcours-lannion.webp" alt="IUT de Lannion — BUT R&T">
+                                </div>
                             </div>
                             <div class="parcours-bloc-texts">
                                 <h3 class="parcours-bloc-title">BUT R&amp;T</h3>
@@ -168,8 +176,10 @@
                     <div class="parcours-bloc">
                         <div class="parcours-bloc-inner">
                             <div class="parcours-bloc-img">
-                                <img class="parcours-img-ph"
-                                     src="images/parcours-laval.webp" alt="MMI Laval">
+                                <div class="parcours-img-wrap">
+                                    <img class="parcours-img-ph"
+                                         src="images/parcours-laval.webp" alt="MMI Laval">
+                                </div>
                             </div>
                             <div class="parcours-bloc-texts">
                                 <h3 class="parcours-bloc-title">MMI</h3>
@@ -183,8 +193,10 @@
                     <div class="parcours-bloc">
                         <div class="parcours-bloc-inner">
                             <div class="parcours-bloc-img">
-                                <img class="parcours-img-ph"
-                                     src="images/parcours-studio.webp" alt="Le Studio — Production & Réalisation">
+                                <div class="parcours-img-wrap">
+                                    <img class="parcours-img-ph"
+                                         src="images/parcours-studio.webp" alt="Le Studio — Production & Réalisation">
+                                </div>
                             </div>
                             <div class="parcours-bloc-texts">
                                 <h3 class="parcours-bloc-title">Le Studio</h3>
@@ -198,8 +210,10 @@
                     <div class="parcours-bloc">
                         <div class="parcours-bloc-inner">
                             <div class="parcours-bloc-img">
-                                <img class="parcours-img-ph"
-                                     src="images/parcours-alternance.webp" alt="Alternance — Webmaster & Création">
+                                <div class="parcours-img-wrap">
+                                    <img class="parcours-img-ph"
+                                         src="images/parcours-alternance.webp" alt="Alternance — Webmaster & Création">
+                                </div>
                             </div>
                             <div class="parcours-bloc-texts">
                                 <h3 class="parcours-bloc-title">Alternance</h3>
@@ -282,22 +296,18 @@
             <div class="contact-content">
                 <h2 class="contact-title reveal">Travaillons ensemble</h2>
                 <p class="contact-subtitle reveal">Vous avez un projet en tête ? Parlons-en.</p>
-                <a href="mailto:thomas@example.com" class="contact-email reveal">thomas@example.com</a>
+                <a href="mailto:hello@thomasdoudet.fr" class="contact-email reveal">hello@thomasdoudet.fr</a>
                 
                 <div class="contact-socials reveal">
-                    <a href="#" class="social-link">Instagram</a>
-                    <a href="#" class="social-link">LinkedIn</a>
-                    <a href="#" class="social-link">Vimeo</a>
+                    <a href="https://www.instagram.com/thomas.doudet_creations/" class="social-link" target="_blank">Instagram</a>
+                    <a href="https://www.linkedin.com/in/thomasdoudet/" class="social-link" target="_blank">LinkedIn</a>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2025 Thomas Doudet. Tous droits réservés.</p>
-            <p>Portfolio cinématique • Réalisation & Design graphique</p>
-        </div>
+        <p>&copy; 2025 Thomas Doudet. Tous droits réservés.</p>
     </footer>
 
     <script src="script/main.js"></script>

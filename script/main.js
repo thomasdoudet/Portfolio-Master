@@ -37,16 +37,28 @@ document.addEventListener('mouseenter', () => {
 // ========================================
 (function () {
     const navbar = document.querySelector('.navbar');
-    if (!navbar) return;
+    const statement = document.querySelector('.statement');
+    if (!navbar || !statement) return;
 
-    let lastY = 0;
+    let lastY = window.scrollY;
     let wasGoingDown = false;
     let scrollUpStartY = 0;
     let hidden = false;
-    const SCROLL_UP_THRESHOLD = 300; // Pixels à scroller vers le haut avant réapparition
+    const SCROLL_UP_THRESHOLD = 300;
+
+    function getStatementBounds() {
+        return statement.getBoundingClientRect().top + window.scrollY;
+    }
 
     window.addEventListener('scroll', () => {
         const currentY = window.scrollY;
+        const statementTop = getStatementBounds();
+        
+        // Ignorer complètement la logique si on est dans la zone statement (ou 200px avant)
+        if (currentY >= statementTop - 200 && currentY < statementTop + window.innerHeight + 500) {
+            return;
+        }
+
         const goingDown = currentY > lastY;
 
         if (goingDown) {
@@ -58,7 +70,7 @@ document.addEventListener('mouseenter', () => {
             wasGoingDown = true;
         } else if (!goingDown && wasGoingDown) {
             // On vient de passer de "scroll vers le bas" à "scroll vers le haut"
-            scrollUpStartY = lastY; // Enregistre où on a changé de direction
+            scrollUpStartY = lastY;
             wasGoingDown = false;
         }
         
@@ -97,26 +109,102 @@ gsap.to('.hero-scroll', {
 });
 
 // ========================================
-// Hero Role Rotation — mot vertical, une entrée à la fois
+// Hero Role Rotation — sliding vertical with seamless loop
+// Structure expected: .hero-role > .role-inner > .role-item* (last item is duplicate of first)
 // ========================================
-const roleItems = document.querySelectorAll('.role-item');
-if (roleItems.length > 1) {
-    // Cacher tous sauf le premier
-    gsap.set(roleItems, (i) => ({
-        opacity: i === 0 ? 1 : 0,
-        y:       i === 0 ? 0 : 18,
-    }));
+const roleInner = document.querySelector('.role-inner');
+const roleItems = roleInner ? roleInner.querySelectorAll('.role-item') : [];
+if (roleInner && roleItems.length > 1) {
+    gsap.set(roleInner, { y: 0 });
 
-    const tl = gsap.timeline({ repeat: -1, delay: 2.4 });
-    roleItems.forEach((item, i) => {
-        const next = roleItems[(i + 1) % roleItems.length];
-        tl.to(item, { opacity: 0, y: -18, duration: 0.38, ease: 'power2.in' }, '+=2.2');
-        tl.fromTo(next,
-            { opacity: 0, y: 18 },
-            { opacity: 1, y: 0,  duration: 0.38, ease: 'power2.out' },
-            '<+0.05'
-        );
+    let currentRole = 0;
+    const totalRoles = roleItems.length; // includes the duplicate at the end
+
+    function getStepHeight() {
+        const h = roleItems[0].getBoundingClientRect().height;
+        return h || (parseFloat(getComputedStyle(roleItems[0]).fontSize) * 1.4);
+    }
+
+    let stepHeight = getStepHeight();
+    window.addEventListener('resize', () => { stepHeight = getStepHeight(); });
+
+    function rotateRole() {
+        currentRole++;
+        // When we reach the duplicated first item at the end, animate there then reset instantly to 0
+        if (currentRole >= totalRoles - 1) {
+            gsap.to(roleInner, {
+                y: -(currentRole * stepHeight),
+                duration: 0.6,
+                ease: 'power3.inOut',
+                onComplete: () => {
+                    currentRole = 0;
+                    gsap.set(roleInner, { y: 0 }); // snap back without animation
+                }
+            });
+        } else {
+            gsap.to(roleInner, { y: -(currentRole * stepHeight), duration: 0.6, ease: 'power3.inOut' });
+        }
+    }
+
+    // Start after a short delay to match prior timing, then loop
+    let intervalId = null;
+    const startDelay = 2400;
+    setTimeout(() => {
+        rotateRole();
+        intervalId = setInterval(rotateRole, 2600);
+    }, startDelay);
+
+    // Clean up on page unload to avoid timers lingering
+    window.addEventListener('beforeunload', () => {
+        if (intervalId) clearInterval(intervalId);
     });
+}
+
+// ========================================
+// Statement Section — Pin + Animated Text Reveal (char by char)
+// ========================================
+const statementSection = document.querySelector('.statement');
+const statementTitle = document.querySelector('.statement-title');
+const statementText = document.querySelector('.statement-text');
+
+if (statementSection && statementTitle && statementText) {
+    // Wrap each character in the text with a span for letter-by-letter animation
+    const originalText = statementText.innerText;
+    statementText.innerHTML = originalText
+        .split('')
+        .map(char => `<span class="statement-char" style="opacity: 0; display: inline;">${char}</span>`)
+        .join('');
+
+    const statementChars = statementText.querySelectorAll('.statement-char');
+
+    const statementTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: statementSection,
+            start: 'top top',
+            end: () => `+=${window.innerHeight * 4}`, // Longer pin duration for full text animation + margin
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+        }
+    });
+
+    // Animate title: fade in + slight scale/y
+    statementTl.fromTo(statementTitle,
+        { opacity: 0, y: 30, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }
+    );
+
+    // Animate text: char by char fade in with stagger
+    statementTl.fromTo(statementChars,
+        { opacity: 0 },
+        { 
+            opacity: 1, 
+            duration: 0.02,
+            stagger: 0.03, // 30ms between each character
+            ease: 'power1.inOut'
+        },
+        '-=0.4' // Start slightly before title finishes
+    );
 }
 
 // ========================================
@@ -162,11 +250,7 @@ setupRevealAnimations();
 // ========================================
 const marqueeContent = document.querySelector('.marquee-content');
 if (marqueeContent) {
-    // Clone the content to create seamless loop
-    const clone = marqueeContent.cloneNode(true);
-    marqueeContent.parentElement.appendChild(clone);
-    
-    gsap.fromTo('.marquee-content', 
+    gsap.fromTo(marqueeContent, 
         { x: 0 },
         { 
             x: -marqueeContent.offsetWidth,
@@ -218,6 +302,8 @@ gsap.from('.projects-heading', {
 (function () {
     const projectBgs  = document.querySelectorAll('.project-bg');
     const projectList = document.getElementById('js-projects-list');
+    const projectSection = document.querySelector('.projects');
+    const projectItems = document.querySelectorAll('.project-item');
     if (!projectBgs.length || !projectList) return;
 
     let currentBg = -1; // -1 = aucune image visible
@@ -237,12 +323,15 @@ gsap.from('.projects-heading', {
         currentBg = -1;
     }
 
-    document.querySelectorAll('.project-item').forEach((item) => {
+    projectItems.forEach((item) => {
         const index = parseInt(item.getAttribute('data-index'), 10);
         item.addEventListener('mouseenter', () => activateBg(index));
     });
 
-    projectList.addEventListener('mouseleave', resetBg);
+    // Reset background when leaving the entire projects section
+    if (projectSection) {
+        projectSection.addEventListener('mouseleave', resetBg);
+    }
 }());
 
 // ========================================
@@ -250,6 +339,7 @@ gsap.from('.projects-heading', {
 // ========================================
 (function () {
     const projectItems = document.querySelectorAll('.project-item');
+    const projectList = document.getElementById('js-projects-list');
     if (!projectItems.length) return;
 
     projectItems.forEach((item) => {
@@ -267,10 +357,16 @@ gsap.from('.projects-heading', {
                 }
             });
         });
+
+        // Reset opacity when leaving an item (even if staying in the list)
+        item.addEventListener('mouseleave', () => {
+            document.querySelectorAll('.project-item-link').forEach((link) => {
+                gsap.to(link, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+            });
+        });
     });
 
     // Restore all links when leaving the list
-    const projectList = document.getElementById('js-projects-list');
     if (projectList) {
         projectList.addEventListener('mouseleave', () => {
             document.querySelectorAll('.project-item-link').forEach((link) => {
@@ -299,7 +395,7 @@ if (parcoursTrack) {
         scrollTrigger: {
             trigger: '.parcours',
             start: 'top top',
-            end: () => `+=${totalMove * 1.5 + window.innerWidth * 0.5}`,
+            end: () => `+=${totalMove * 1.0 + window.innerWidth * 0.3}`,
             pin: true,
             scrub: 1,
             anticipatePin: 1,
@@ -322,6 +418,7 @@ if (parcoursTrack) {
     // Images avancent légèrement plus vite que les textes (facteur ×1.3 environ)
     parcoursTrack.querySelectorAll('.parcours-bloc').forEach((bloc) => {
         const img   = bloc.querySelector('.parcours-img-ph');
+        const imgWrap = bloc.querySelector('.parcours-img-wrap') || img;
         const texts = bloc.querySelector('.parcours-bloc-texts');
 
         const stConfig = {
@@ -332,7 +429,7 @@ if (parcoursTrack) {
             scrub: true,
         };
 
-        if (img)   gsap.fromTo(img,   { x: '35%' }, { x: '-35%', ease: 'none', scrollTrigger: { ...stConfig } });
+        if (imgWrap)   gsap.fromTo(imgWrap,   { x: '35%' }, { x: '-35%', ease: 'none', scrollTrigger: { ...stConfig } });
         if (texts) gsap.fromTo(texts, { x: '-18%' }, { x:  '18%', ease: 'none', scrollTrigger: { ...stConfig } });
     });
 }
