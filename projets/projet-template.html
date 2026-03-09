@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{PROJECT_TITLE}} — Thomas Doudet</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,300;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/projets.css">
+</head>
+<body>
+
+    <!-- Construction grid -->
+    <script src="../script/grid.js"></script>
+
+    <!-- Custom cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <a href="../index.html" class="logo">Thomas Doudet</a>
+            <nav class="nav-links">
+                <a href="../index.html#about">À propos</a>
+                <a href="../index.html#projects">Projets</a>
+                <a href="../index.html#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ─── HERO ──────────────────────────────────────────── -->
+        <section class="proj-hero">
+            <div class="proj-hero-img">
+                <!-- Remplacer .ph par une vraie image : <img src="../images/{{IMAGE}}.webp" alt="{{ALT}}"> -->
+                <div class="ph"></div>
+            </div>
+            <div class="proj-corner bl"></div>
+            <div class="proj-corner br"></div>
+            <a href="../index.html#projects" class="proj-hero-back">Retour aux projets</a>
+            <div class="proj-hero-content">
+                <div class="proj-meta">
+                    <div class="proj-meta-item">Catégorie<strong>{{CATEGORY}}</strong></div>
+                    <div class="proj-meta-item">Année<strong>{{YEAR}}</strong></div>
+                    <div class="proj-meta-item">Contexte<strong>{{CONTEXT}}</strong></div>
+                </div>
+                <h1 class="proj-hero-title">{{PROJECT_TITLE}}</h1>
+            </div>
+        </section>
+
+        <!-- ─── STATEMENT ─────────────────────────────────────── -->
+        <div class="proj-statement">
+            <p class="proj-statement-text reveal">
+                {{STATEMENT_LINE_1}}<br>
+                {{STATEMENT_LINE_2}}<br>
+                {{STATEMENT_LINE_3}}
+            </p>
+        </div>
+
+        <!-- ─── OVERVIEW ──────────────────────────────────────── -->
+        <section class="proj-overview">
+            <div class="proj-overview-left">
+                <div class="eyebrow">Le projet</div>
+                <h2 class="proj-overview-heading reveal">{{OVERVIEW_HEADING}}</h2>
+            </div>
+            <div class="proj-overview-text reveal-left">
+                <p>{{OVERVIEW_P1}}</p>
+                <p>{{OVERVIEW_P2}}</p>
+            </div>
+        </section>
+
+        <!-- ─── ROLE & TOOLS STRIP ────────────────────────────── -->
+        <div class="proj-strip reveal">
+            <div class="proj-strip-col">
+                <h4>Mon rôle</h4>
+                <ul>
+                    <li>{{ROLE_1}}</li>
+                    <li>{{ROLE_2}}</li>
+                    <li>{{ROLE_3}}</li>
+                </ul>
+            </div>
+            <div class="proj-strip-col">
+                <h4>Outils</h4>
+                <ul>
+                    <li>{{TOOL_1}}</li>
+                    <li>{{TOOL_2}}</li>
+                    <li>{{TOOL_3}}</li>
+                </ul>
+            </div>
+            <div class="proj-strip-col">
+                <h4>Livrables</h4>
+                <ul>
+                    <li>{{DELIV_1}}</li>
+                    <li>{{DELIV_2}}</li>
+                    <li>{{DELIV_3}}</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ─── FULL-WIDTH IMAGE ───────────────────────────────── -->
+        <div class="proj-fullimg">
+            <div class="proj-fullimg-wrap reveal">
+                <div class="ph"></div>
+                <div class="img-corner tl"></div>
+                <div class="img-corner tr"></div>
+                <div class="img-corner bl"></div>
+                <div class="img-corner br"></div>
+            </div>
+            <div class="proj-fullimg-caption">{{IMAGE_CAPTION}}</div>
+        </div>
+
+        <!-- ─── TEXT + IMAGE (étape 1) ───────────────────────── -->
+        <section class="proj-text-img">
+            <div class="proj-text-img-content reveal">
+                <div class="eyebrow">{{STEP1_LABEL}}</div>
+                <h3>{{STEP1_HEADING}}</h3>
+                <p>{{STEP1_TEXT}}</p>
+            </div>
+            <div class="proj-text-img-visual reveal">
+                <div class="ph"></div>
+                <div class="img-corner tl"></div>
+                <div class="img-corner br"></div>
+            </div>
+        </section>
+
+        <!-- ─── SIDE-BY-SIDE IMAGES ───────────────────────────── -->
+        <div class="proj-duo">
+            <div class="proj-duo-item reveal">
+                <div class="ph"></div>
+                <div class="img-corner tl"></div>
+                <div class="img-corner br"></div>
+            </div>
+            <div class="proj-duo-item reveal">
+                <div class="ph"></div>
+                <div class="img-corner tl"></div>
+                <div class="img-corner br"></div>
+            </div>
+        </div>
+
+        <!-- ─── TEXT + IMAGE REVERSE (étape 2) ──────────────── -->
+        <section class="proj-text-img reverse">
+            <div class="proj-text-img-content reveal">
+                <div class="eyebrow">{{STEP2_LABEL}}</div>
+                <h3>{{STEP2_HEADING}}</h3>
+                <p>{{STEP2_TEXT}}</p>
+            </div>
+            <div class="proj-text-img-visual reveal">
+                <div class="ph"></div>
+                <div class="img-corner tl"></div>
+                <div class="img-corner br"></div>
+            </div>
+        </section>
+
+        <!-- ─── VIDEO EMBED (optionnel — supprimer si inutile) ── -->
+        <div class="proj-video reveal">
+            <div class="proj-video-wrap">
+                <iframe src="https://www.youtube.com/embed/{{YOUTUBE_ID}}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <!-- ─── RESULTS ───────────────────────────────────────── -->
+        <section class="proj-results">
+            <div class="eyebrow">Résultats</div>
+            <div class="proj-results-grid">
+                <div class="proj-result-item reveal">
+                    <div class="proj-result-num">{{NUM_1}}</div>
+                    <div class="proj-result-label">{{LABEL_1}}</div>
+                </div>
+                <div class="proj-result-item reveal">
+                    <div class="proj-result-num">{{NUM_2}}</div>
+                    <div class="proj-result-label">{{LABEL_2}}</div>
+                </div>
+                <div class="proj-result-item reveal">
+                    <div class="proj-result-num">{{NUM_3}}</div>
+                    <div class="proj-result-label">{{LABEL_3}}</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── GALLERY (optionnel — supprimer si inutile) ────── -->
+        <section class="proj-gallery">
+            <div class="eyebrow">Galerie</div>
+            <div class="proj-gallery-grid">
+                <div class="proj-gallery-item span-2"><div class="ph"></div></div>
+                <div class="proj-gallery-item"><div class="ph"></div></div>
+                <div class="proj-gallery-item"><div class="ph"></div></div>
+                <div class="proj-gallery-item tall"><div class="ph"></div></div>
+                <div class="proj-gallery-item"><div class="ph"></div></div>
+                <div class="proj-gallery-item"><div class="ph"></div></div>
+                <div class="proj-gallery-item span-2"><div class="ph"></div></div>
+            </div>
+        </section>
+
+        <!-- ─── NEXT PROJECT ──────────────────────────────────── -->
+        <div class="proj-next">
+            <div class="proj-next-label">Projet suivant</div>
+            <a href="{{NEXT_URL}}" class="reveal">{{NEXT_TITLE}}</a>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Thomas Doudet. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../script/projets.js"></script>
+
+</body>
+</html>

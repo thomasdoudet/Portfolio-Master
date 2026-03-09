@@ -296,6 +296,7 @@ gsap.from('.projects-heading', {
     },
 });
 
+
 // ========================================
 // Projects — cross-fade image de fond au hover
 // ========================================
@@ -306,26 +307,24 @@ gsap.from('.projects-heading', {
     const projectItems = document.querySelectorAll('.project-item');
     if (!projectBgs.length || !projectList) return;
 
-    let currentBg = -1; // -1 = aucune image visible
-
     function activateBg(index) {
-        if (index === currentBg) return;
-        if (currentBg !== -1) {
-            gsap.to(projectBgs[currentBg], { opacity: 0, duration: 0.7, ease: 'power2.inOut' });
-        }
-        gsap.to(projectBgs[index], { opacity: 1, duration: 0.7, ease: 'power2.inOut' });
-        currentBg = index;
+        projectBgs.forEach((bg, i) => {
+            gsap.killTweensOf(bg);
+            gsap.to(bg, { opacity: i === index ? 1 : 0, duration: 0.5, ease: 'power2.inOut' });
+        });
     }
 
     function resetBg() {
-        if (currentBg === -1) return;
-        gsap.to(projectBgs[currentBg], { opacity: 0, duration: 0.55, ease: 'power2.inOut' });
-        currentBg = -1;
+        projectBgs.forEach((bg) => {
+            gsap.killTweensOf(bg);
+            gsap.to(bg, { opacity: 0, duration: 0.4, ease: 'power2.inOut' });
+        });
     }
 
     projectItems.forEach((item) => {
         const index = parseInt(item.getAttribute('data-index'), 10);
         item.addEventListener('mouseenter', () => activateBg(index));
+        item.addEventListener('mouseleave', () => resetBg());
     });
 
     // Reset background when leaving the entire projects section
@@ -353,7 +352,7 @@ gsap.from('.projects-heading', {
             // Puis dim tous les AUTRES liens (sauf celui survolé)
             document.querySelectorAll('.project-item-link').forEach((link) => {
                 if (link.closest('.project-item') !== item) {
-                    gsap.to(link, { opacity: 0.5, duration: 0.3, ease: 'power2.out' });
+                    gsap.to(link, { opacity: 0.25, duration: 0.3, ease: 'power2.out' });
                 }
             });
         });
@@ -374,6 +373,64 @@ gsap.from('.projects-heading', {
             });
         });
     }
+}());
+
+// ========================================
+// Projects Heading — SplitText, glisse vers le bas au hover des liens
+// ========================================
+(function () {
+    const heading     = document.querySelector('.projects-heading');
+    const links       = document.querySelectorAll('.project-item-link');
+    const projectSect = document.querySelector('.projects');
+    if (!heading || !links.length) return;
+
+    // Attendre que SplitText soit disponible (chargement CDN async possible)
+    function init() {
+        if (typeof SplitText === 'undefined') {
+            setTimeout(init, 100);
+            return;
+        }
+
+        const split = new SplitText(heading, { type: 'chars', charsClass: 'ph-char' });
+        const chars = split.chars;
+        let hidden = false;
+
+        function hideHeading() {
+            if (hidden) return;
+            hidden = true;
+            gsap.killTweensOf(chars);
+            gsap.to(chars, {
+                y: '115%',
+                duration: 0.5,
+                ease: 'power3.in',
+                stagger: { each: 0.016, from: 'start' },
+            });
+        }
+
+        function showHeading() {
+            if (!hidden) return;
+            hidden = false;
+            gsap.killTweensOf(chars);
+            gsap.to(chars, {
+                y: '0%',
+                duration: 0.6,
+                ease: 'power3.out',
+                stagger: { each: 0.016, from: 'end' },
+            });
+        }
+
+        // Mouseenter sur chaque lien → cache le heading
+        links.forEach((link) => {
+            link.addEventListener('mouseenter', hideHeading);
+        });
+
+        // Mouseleave de la section entière → remet le heading
+        if (projectSect) {
+            projectSect.addEventListener('mouseleave', showHeading);
+        }
+    }
+
+    init();
 }());
 
 // ========================================
@@ -433,6 +490,15 @@ if (parcoursTrack) {
         if (texts) gsap.fromTo(texts, { x: '-18%' }, { x:  '18%', ease: 'none', scrollTrigger: { ...stConfig } });
     });
 }
+
+// Projects — pin à l'entrée (après parcours pour que pinSpacing soit calculé)
+ScrollTrigger.create({
+    trigger: ".projects",
+    start: "top top",
+    end: "+=600",
+    pin: true,
+    pinSpacing: true,
+});
 
 // ========================================
 // Initialize

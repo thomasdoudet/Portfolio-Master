@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{PROJECT_TITLE}} — Thomas Doudet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0A0E1A;
+      --bg2:       #0D1120;
+      --cream:     #F5E6C8;
+      --muted:     #C4B89A;
+      --dim:       rgba(245, 230, 200, 0.35);
+      --line:      #1A1F30;
+      --line-num:  #2A3050;
+      --accent:    #1E2233;
+      --serif:     'Cormorant Garamond', Georgia, serif;
+      --sans:      'Syne', sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ─── CUSTOM CURSOR ────────────────────────────────────────── */
+    .cursor {
+      position: fixed; top: 0; left: 0;
+      width: 8px; height: 8px;
+      background: var(--cream);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .25s, height .25s, background .25s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(245,230,200,.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .12s ease-out, width .25s, height .25s;
+    }
+
+    /* ─── CONSTRUCTION GRID LINES ──────────────────────────────── */
+    .grid-lines {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      display: flex;
+      padding: 0 80px;
+      justify-content: space-between;
+    }
+    .grid-line {
+      width: 1px;
+      height: 100%;
+      background: var(--line);
+      position: relative;
+    }
+    .grid-line::before,
+    .grid-line::after {
+      content: attr(data-n);
+      position: absolute;
+      left: 4px;
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .1em;
+      color: var(--line-num);
+    }
+    .grid-line::before { top: 80px; }
+    .grid-line::after  { bottom: 24px; }
+
+    /* ─── NAV ──────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 80px;
+    }
+    nav::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,14,26,.9) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .nav-logo {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-decoration: none;
+      position: relative;
+    }
+    .nav-links {
+      display: flex; gap: 40px; list-style: none;
+      position: relative;
+    }
+    .nav-links a {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--cream);
+      transition: width .4s ease;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ─── GRAIN OVERLAY (global) ───────────────────────────────── */
+    .grain {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: .04;
+    }
+
+    /* ─── PROJECT HERO ─────────────────────────────────────────── */
+    .proj-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 80px 80px;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .proj-hero-img {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .proj-hero-img img,
+    .proj-hero-img .ph {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .proj-hero-img .ph {
+      background: linear-gradient(160deg, #12192a 0%, #0a0e1a 60%, #1a1208 100%);
+    }
+    .proj-hero-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--bg) 0%, rgba(10,14,26,.6) 40%, rgba(10,14,26,.2) 100%);
+    }
+
+    .proj-hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .proj-hero-back {
+      position: absolute;
+      top: 100px;
+      left: 80px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .proj-hero-back::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--muted);
+      transition: width .3s;
+    }
+    .proj-hero-back:hover { color: var(--cream); }
+    .proj-hero-back:hover::before { width: 48px; }
+
+    .proj-meta {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 32px;
+    }
+    .proj-meta-item {
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--line-num);
+    }
+    .proj-meta-item strong {
+      display: block;
+      margin-top: 6px;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 16px;
+      font-weight: 300;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--muted);
+    }
+
+    .proj-hero-title {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(64px, 8vw, 120px);
+      line-height: .92;
+      color: var(--cream);
+    }
+
+    /* Corner marks on hero */
+    .proj-corner {
+      position: absolute;
+      width: 12px; height: 12px;
+      z-index: 3;
+    }
+    .proj-corner::before, .proj-corner::after {
+      content: '';
+      position: absolute;
+      background: var(--line-num);
+    }
+    .proj-corner::before { width: 100%; height: 1px; top: 0; left: 0; }
+    .proj-corner::after  { width: 1px; height: 100%; top: 0; left: 0; }
+    .proj-corner.br { bottom: 80px; right: 80px; transform: rotate(180deg); }
+    .proj-corner.bl { bottom: 80px; left: 80px; transform: rotate(270deg); }
+
+    /* ─── SECTION EYEBROW ──────────────────────────────────────── */
+    .eyebrow {
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--line-num);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--line-num);
+    }
+
+    /* ─── STATEMENT (big italic phrase) ────────────────────────── */
+    .proj-statement {
+      position: relative;
+      z-index: 2;
+      padding: 120px 80px;
+      display: flex;
+      justify-content: center;
+    }
+    .proj-statement-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(32px, 4.5vw, 64px);
+      line-height: 1.15;
+      color: var(--cream);
+      text-align: center;
+      max-width: 1000px;
+    }
+    .proj-statement-text em {
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* ─── OVERVIEW (intro section) ─────────────────────────────── */
+    .proj-overview {
+      position: relative;
+      z-index: 2;
+      padding: 0 80px 120px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .proj-overview-left .eyebrow { margin-bottom: 24px; }
+
+    .proj-overview-heading {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(40px, 5vw, 72px);
+      line-height: 1;
+      color: var(--cream);
+      margin-bottom: 32px;
+    }
+
+    .proj-overview-text {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 520px;
+    }
+    .proj-overview-text p + p {
+      margin-top: 20px;
+    }
+
+    /* ─── ROLE & TOOLS STRIP ───────────────────────────────────── */
+    .proj-strip {
+      position: relative;
+      z-index: 2;
+      padding: 48px 80px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      gap: 80px;
+    }
+    .proj-strip-col {
+      flex: 1;
+    }
+    .proj-strip-col h4 {
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--line-num);
+      margin-bottom: 16px;
+    }
+    .proj-strip-col ul {
+      list-style: none;
+    }
+    .proj-strip-col li {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--muted);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .proj-strip-col li:last-child { border-bottom: none; }
+
+    /* ─── FULL-WIDTH IMAGE ─────────────────────────────────────── */
+    .proj-fullimg {
+      position: relative;
+      z-index: 2;
+      padding: 80px;
+    }
+    .proj-fullimg-wrap {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      aspect-ratio: 16/9;
+    }
+    .proj-fullimg-wrap img,
+    .proj-fullimg-wrap .ph {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .proj-fullimg-wrap .ph {
+      background: linear-gradient(135deg, #1a2035 0%, #0d1525 40%, #1c1008 100%);
+    }
+    /* Corner marks on images */
+    .img-corner {
+      position: absolute;
+      width: 10px; height: 10px;
+    }
+    .img-corner::before, .img-corner::after {
+      content: '';
+      position: absolute;
+      background: var(--line-num);
+    }
+    .img-corner::before { width: 100%; height: 1px; top: 0; left: 0; }
+    .img-corner::after  { width: 1px; height: 100%; top: 0; left: 0; }
+    .img-corner.tl { top: 12px; left: 12px; }
+    .img-corner.tr { top: 12px; right: 12px; transform: rotate(90deg); }
+    .img-corner.bl { bottom: 12px; left: 12px; transform: rotate(270deg); }
+    .img-corner.br { bottom: 12px; right: 12px; transform: rotate(180deg); }
+
+    .proj-fullimg-caption {
+      margin-top: 16px;
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: var(--line-num);
+      text-align: right;
+    }
+
+    /* ─── SIDE-BY-SIDE IMAGES ──────────────────────────────────── */
+    .proj-duo {
+      position: relative;
+      z-index: 2;
+      padding: 0 80px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .proj-duo-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+    .proj-duo-item img,
+    .proj-duo-item .ph {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .proj-duo-item .ph {
+      background: linear-gradient(135deg, #0d1820 0%, #1a3040 50%, #0a0e1a 100%);
+    }
+
+    /* ─── TEXT + IMAGE SIDE-BY-SIDE ─────────────────────────────── */
+    .proj-text-img {
+      position: relative;
+      z-index: 2;
+      padding: 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .proj-text-img.reverse { direction: rtl; }
+    .proj-text-img.reverse > * { direction: ltr; }
+
+    .proj-text-img-content {
+      max-width: 520px;
+    }
+    .proj-text-img-content h3 {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(36px, 4vw, 56px);
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 28px;
+    }
+    .proj-text-img-content p {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+    .proj-text-img-content p + p { margin-top: 16px; }
+
+    .proj-text-img-visual {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+    .proj-text-img-visual img,
+    .proj-text-img-visual .ph {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .proj-text-img-visual .ph {
+      background: linear-gradient(160deg, #1a1510 0%, #2a1c0a 50%, #0a0e1a 100%);
+    }
+
+    /* ─── RESULTS / KEY FIGURES ─────────────────────────────────── */
+    .proj-results {
+      position: relative;
+      z-index: 2;
+      padding: 120px 80px;
+      border-top: 1px solid var(--line);
+    }
+    .proj-results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 56px;
+    }
+    .proj-result-item {
+      text-align: center;
+    }
+    .proj-result-num {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(56px, 6vw, 80px);
+      line-height: 1;
+      color: var(--cream);
+    }
+    .proj-result-label {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--line-num);
+      margin-top: 12px;
+    }
+
+    /* ─── FINAL GALLERY ────────────────────────────────────────── */
+    .proj-gallery {
+      position: relative;
+      z-index: 2;
+      padding: 80px;
+      border-top: 1px solid var(--line);
+    }
+    .proj-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .proj-gallery-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1;
+      cursor: pointer;
+    }
+    .proj-gallery-item.span-2 {
+      grid-column: span 2;
+      aspect-ratio: 2/1;
+    }
+    .proj-gallery-item.tall {
+      grid-row: span 2;
+      aspect-ratio: auto;
+    }
+    .proj-gallery-item img,
+    .proj-gallery-item .ph {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .6s ease;
+    }
+    .proj-gallery-item .ph {
+      background: linear-gradient(135deg, #0f1a15 0%, #0a1820 60%, #15100a 100%);
+    }
+    .proj-gallery-item:hover img,
+    .proj-gallery-item:hover .ph {
+      transform: scale(1.05);
+    }
+    .proj-gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(245,230,200,.06);
+      pointer-events: none;
+    }
+
+    /* ─── VIDEO EMBED ──────────────────────────────────────────── */
+    .proj-video {
+      position: relative;
+      z-index: 2;
+      padding: 80px;
+    }
+    .proj-video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      background: var(--bg2);
+    }
+    .proj-video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ─── NEXT PROJECT ─────────────────────────────────────────── */
+    .proj-next {
+      position: relative;
+      z-index: 2;
+      padding: 120px 80px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+    .proj-next-label {
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--line-num);
+      margin-bottom: 24px;
+    }
+    .proj-next a {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(48px, 6vw, 96px);
+      line-height: 1;
+      color: var(--cream);
+      text-decoration: none;
+      transition: opacity .3s;
+    }
+    .proj-next a:hover { opacity: .6; }
+
+    /* ─── FOOTER (same as index) ───────────────────────────────── */
+    .footer-bar {
+      border-top: 1px solid var(--line);
+      padding: 24px 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .footer-bar p {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .08em;
+      color: var(--line-num);
+    }
+    .footer-socials {
+      display: flex; gap: 24px; list-style: none;
+    }
+    .footer-socials a {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--line-num);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .footer-socials a:hover { color: var(--cream); }
+
+    /* ─── ANIMATIONS ───────────────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(30px); }
+    .reveal-left { opacity: 0; transform: translateX(-30px); }
+
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Grain overlay -->
+  <div class="grain"></div>
+
+  <!-- Construction grid -->
+  <div class="grid-lines">
+    <div class="grid-line" data-n="01."></div>
+    <div class="grid-line" data-n="02."></div>
+    <div class="grid-line" data-n="03."></div>
+    <div class="grid-line" data-n="04."></div>
+    <div class="grid-line" data-n="05."></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">Thomas Doudet</a>
+    <ul class="nav-links">
+      <li><a href="index.html#gallery-section">Projets</a></li>
+      <li><a href="index.html#apropos">À propos</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       EXEMPLE : LA CÉRÉMONIE DES WALID
+       Remplacer le contenu pour chaque projet
+       ═══════════════════════════════════════════════════════════ -->
+
+  <!-- ─── PROJECT HERO ─────────────────────────────────────── -->
+  <section class="proj-hero">
+    <div class="proj-hero-img">
+      <!-- Remplacer .ph par <img src="..." alt="..."> -->
+      <div class="ph"></div>
+    </div>
+    <div class="proj-corner bl"></div>
+    <div class="proj-corner br"></div>
+
+    <a href="index.html#gallery-section" class="proj-hero-back">Retour aux projets</a>
+
+    <div class="proj-hero-content">
+      <div class="proj-meta reveal">
+        <div class="proj-meta-item">
+          Catégorie
+          <strong>{{CATEGORY}}</strong>
+        </div>
+        <div class="proj-meta-item">
+          Année
+          <strong>{{YEAR}}</strong>
+        </div>
+        <div class="proj-meta-item">
+          Contexte
+          <strong>{{CONTEXT}}</strong>
+        </div>
+      </div>
+      <h1 class="proj-hero-title reveal">{{PROJECT_TITLE}}</h1>
+    </div>
+  </section>
+
+  <!-- ─── STATEMENT ────────────────────────────────────────── -->
+  <div class="proj-statement">
+    <p class="proj-statement-text reveal">
+      {{STATEMENT_TEXT}}
+    </p>
+  </div>
+
+  <!-- ─── OVERVIEW ─────────────────────────────────────────── -->
+  <section class="proj-overview">
+    <div class="proj-overview-left">
+      <div class="eyebrow">Le projet</div>
+      <h2 class="proj-overview-heading reveal">{{OVERVIEW_HEADING}}</h2>
+    </div>
+    <div class="proj-overview-text reveal">
+      <p>{{OVERVIEW_P1}}</p>
+      <p>{{OVERVIEW_P2}}</p>
+    </div>
+  </section>
+
+  <!-- ─── ROLE & TOOLS ────────────────────────────────────── -->
+  <div class="proj-strip reveal">
+    <div class="proj-strip-col">
+      <h4>Mon rôle</h4>
+      <ul>
+        <!-- Adapter selon le projet -->
+        <li>{{ROLE_1}}</li>
+        <li>{{ROLE_2}}</li>
+        <li>{{ROLE_3}}</li>
+      </ul>
+    </div>
+    <div class="proj-strip-col">
+      <h4>Outils</h4>
+      <ul>
+        <li>{{TOOL_1}}</li>
+        <li>{{TOOL_2}}</li>
+        <li>{{TOOL_3}}</li>
+      </ul>
+    </div>
+    <div class="proj-strip-col">
+      <h4>Livrables</h4>
+      <ul>
+        <li>{{DELIV_1}}</li>
+        <li>{{DELIV_2}}</li>
+        <li>{{DELIV_3}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─── FULL-WIDTH IMAGE ─────────────────────────────────── -->
+  <div class="proj-fullimg">
+    <div class="proj-fullimg-wrap reveal">
+      <div class="ph"></div>
+      <div class="img-corner tl"></div>
+      <div class="img-corner tr"></div>
+      <div class="img-corner bl"></div>
+      <div class="img-corner br"></div>
+    </div>
+    <div class="proj-fullimg-caption">{{IMAGE_CAPTION}}</div>
+  </div>
+
+  <!-- ─── TEXT + IMAGE (processus / étape 1) ───────────────── -->
+  <section class="proj-text-img">
+    <div class="proj-text-img-content reveal">
+      <div class="eyebrow">{{STEP_LABEL}}</div>
+      <h3>{{STEP_HEADING}}</h3>
+      <p>{{STEP_TEXT}}</p>
+    </div>
+    <div class="proj-text-img-visual reveal">
+      <div class="ph"></div>
+      <div class="img-corner tl"></div>
+      <div class="img-corner br"></div>
+    </div>
+  </section>
+
+  <!-- ─── SIDE-BY-SIDE IMAGES ──────────────────────────────── -->
+  <div class="proj-duo">
+    <div class="proj-duo-item reveal">
+      <div class="ph"></div>
+      <div class="img-corner tl"></div>
+      <div class="img-corner br"></div>
+    </div>
+    <div class="proj-duo-item reveal">
+      <div class="ph"></div>
+      <div class="img-corner tl"></div>
+      <div class="img-corner br"></div>
+    </div>
+  </div>
+
+  <!-- ─── TEXT + IMAGE REVERSE (étape 2) ───────────────────── -->
+  <section class="proj-text-img reverse">
+    <div class="proj-text-img-content reveal">
+      <div class="eyebrow">{{STEP2_LABEL}}</div>
+      <h3>{{STEP2_HEADING}}</h3>
+      <p>{{STEP2_TEXT}}</p>
+    </div>
+    <div class="proj-text-img-visual reveal">
+      <div class="ph"></div>
+      <div class="img-corner tl"></div>
+      <div class="img-corner br"></div>
+    </div>
+  </section>
+
+  <!-- ─── VIDEO EMBED (optionnel) ──────────────────────────── -->
+  <div class="proj-video reveal">
+    <div class="proj-video-wrap">
+      <iframe src="{{YOUTUBE_EMBED_URL}}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- ─── RESULTS / KEY FIGURES ────────────────────────────── -->
+  <section class="proj-results">
+    <div class="eyebrow">Résultats</div>
+    <div class="proj-results-grid">
+      <div class="proj-result-item reveal">
+        <div class="proj-result-num">{{NUM_1}}</div>
+        <div class="proj-result-label">{{LABEL_1}}</div>
+      </div>
+      <div class="proj-result-item reveal">
+        <div class="proj-result-num">{{NUM_2}}</div>
+        <div class="proj-result-label">{{LABEL_2}}</div>
+      </div>
+      <div class="proj-result-item reveal">
+        <div class="proj-result-num">{{NUM_3}}</div>
+        <div class="proj-result-label">{{LABEL_3}}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FINAL GALLERY ────────────────────────────────────── -->
+  <section class="proj-gallery">
+    <div class="eyebrow">Galerie</div>
+    <div class="proj-gallery-grid">
+      <div class="proj-gallery-item span-2 reveal"><div class="ph"></div></div>
+      <div class="proj-gallery-item reveal"><div class="ph"></div></div>
+      <div class="proj-gallery-item reveal"><div class="ph"></div></div>
+      <div class="proj-gallery-item tall reveal"><div class="ph"></div></div>
+      <div class="proj-gallery-item reveal"><div class="ph"></div></div>
+      <div class="proj-gallery-item reveal"><div class="ph"></div></div>
+      <div class="proj-gallery-item span-2 reveal"><div class="ph"></div></div>
+    </div>
+  </section>
+
+  <!-- ─── NEXT PROJECT ─────────────────────────────────────── -->
+  <div class="proj-next">
+    <div class="proj-next-label">Projet suivant</div>
+    <a href="{{NEXT_PROJECT_URL}}" class="reveal">{{NEXT_PROJECT_TITLE}}</a>
+  </div>
+
+  <!-- ─── FOOTER ───────────────────────────────────────────── -->
+  <div class="footer-bar">
+    <p>© 2025 Thomas Doudet — Designed &amp; developed with ❤</p>
+    <ul class="footer-socials">
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">Vimeo</a></li>
+      <li><a href="#">Behance</a></li>
+      <li><a href="#">LinkedIn</a></li>
+    </ul>
+  </div>
+
+  <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ─── Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    window.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      gsap.to(cursor, { x: mx, y: my, duration: 0 });
+    });
+    gsap.ticker.add(() => {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      gsap.set(ring, { x: rx, y: ry });
+    });
+
+    document.querySelectorAll('a, .proj-gallery-item, .proj-strip-col li').forEach(el => {
+      el.addEventListener('mouseenter', () => gsap.to(cursor, { width: 48, height: 48, duration: .3 }));
+      el.addEventListener('mouseleave', () => gsap.to(cursor, { width: 8, height: 8, duration: .3 }));
+    });
+
+    // ─── Hero entrance
+    const heroTl = gsap.timeline({ delay: .3 });
+    heroTl
+      .from('.proj-hero-back', { opacity: 0, x: -20, duration: .5 })
+      .to('.proj-meta', { opacity: 1, y: 0, duration: .6 }, '-=.2')
+      .to('.proj-hero-title', { opacity: 1, y: 0, duration: .9, ease: 'power3.out' }, '-=.4');
+
+    // ─── Scroll reveals
+    gsap.utils.toArray('.reveal').forEach(el => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: .9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    gsap.utils.toArray('.reveal-left').forEach(el => {
+      gsap.fromTo(el,
+        { opacity: 0, x: -50 },
+        {
+          opacity: 1, x: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    // ─── Parallax on full-width images
+    gsap.utils.toArray('.proj-fullimg-wrap').forEach(wrap => {
+      const img = wrap.querySelector('img, .ph');
+      gsap.fromTo(img,
+        { y: -30, scale: 1.08 },
+        {
+          y: 30, scale: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: wrap,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        }
+      );
+    });
+
+    // ─── Gallery items stagger
+    gsap.utils.toArray('.proj-gallery-item').forEach((item, i) => {
+      gsap.fromTo(item,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0,
+          duration: .6,
+          delay: i * .06,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 90%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+  </script>
+</body>
+</html>

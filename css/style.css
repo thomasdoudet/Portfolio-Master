@@ -39,6 +39,17 @@ body {
     overflow-x: hidden;
 }
 
+/* Grain global — fixed, couvre toute la page sans perturber le layout */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' result='noise' /%3E%3C/filter%3E%3Crect width='400' height='400' fill='white' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 9999;
+}
+
 /* ===================================
    GRID LINES (Background)
    =================================== */
@@ -239,6 +250,9 @@ main {
     width: 100%;
     position: relative;
     z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* H1 conteneur — flex colonne */
@@ -246,6 +260,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: fit-content;
 }
 
 /* Wrapper overflow:hidden — masque le slide-up GSAP */
@@ -360,22 +375,8 @@ main {
     100% { top: 140%; }
 }
 
-/* Grain overlay */
-.hero-grain {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.hero-grain::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' result='noise' /%3E%3C/filter%3E%3Crect width='400' height='400' fill='white' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
-    opacity: 0.04;
-    pointer-events: none;
-}
+/* Grain overlay — géré globalement par body::after */
+.hero-grain { display: none; }
 
 /* ===================================
    STATEMENT SECTION (First)
@@ -385,6 +386,10 @@ main {
     text-align: center;
     position: relative;
     z-index: 10;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .statement-title {
@@ -460,6 +465,7 @@ main {
     height: 300px;
     border: 1px solid var(--accent);
     position: relative;
+    object-fit: cover;
 }
 
 .about-img-main::before,
@@ -482,6 +488,8 @@ main {
     width: 100%;
     height: 180px;
     border: 1px solid var(--accent);
+    object-fit: cover;
+    object-position: top;
 }
 
 .about-title {
@@ -578,7 +586,8 @@ main {
 /* ---- Carte individuelle — une par viewport ---- */
 .parcours-bloc {
     flex-shrink: 0;
-    width: 100vw;
+    min-width: 100vw;
+    width: auto;
     height: 100%;
     display: flex;
     align-items: center;
@@ -589,8 +598,8 @@ main {
 /* Wrapper interne — flex colonne : image en haut, textes en bas */
 .parcours-bloc-inner {
     flex-shrink: 0;
-    width: 70vw;
-    max-width: 900px;
+    width: auto;
+    max-width: none;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -598,9 +607,9 @@ main {
     position: relative;
 }
 
-/* Image — format 4:3, positionnée dans le flux */
+/* Image — format 4:3, taille fixe identique pour tous les blocs */
 .parcours-bloc-img {
-    width: 100%;
+    width: clamp(340px, 36vw, 520px);
     aspect-ratio: 4 / 3;
     position: relative;
     overflow: visible; /* wrapper now handles overflow */
@@ -656,6 +665,7 @@ main {
     line-height: 0.88;
     color: var(--cream);
     margin-bottom: 14px;
+    white-space: nowrap;
 }
 
 .parcours-bloc-year {
@@ -706,7 +716,7 @@ main {
 .projects-bg-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(10, 14, 26, 0.62);
+    background: rgba(10, 14, 26, 0.3);
     z-index: 1;
 }
 
@@ -740,6 +750,18 @@ main {
 /* Premier projet actif par défaut */
 .project-item.active .project-item-link {
     opacity: 1;
+}
+
+/* Mask — clips le heading quand il glisse vers le bas */
+.projects-heading-mask {
+    overflow: hidden;
+    line-height: 1;
+}
+
+/* Chars générés par SplitText — will-change pour perf */
+.ph-char {
+    display: inline-block;
+    will-change: transform;
 }
 
 /* "Mes Projets" — huge italic, bas de section comme dans le Figma */
