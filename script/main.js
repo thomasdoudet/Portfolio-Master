@@ -13,7 +13,7 @@ document.addEventListener('mousemove', (e) => {
         y: e.clientY,
         duration: 0.1
     });
-    
+
     gsap.to(cursorRing, {
         x: e.clientX,
         y: e.clientY,
@@ -53,7 +53,7 @@ document.addEventListener('mouseenter', () => {
     window.addEventListener('scroll', () => {
         const currentY = window.scrollY;
         const statementTop = getStatementBounds();
-        
+
         // Ignorer complètement la logique si on est dans la zone statement (ou 200px avant)
         if (currentY >= statementTop - 200 && currentY < statementTop + window.innerHeight + 500) {
             return;
@@ -73,7 +73,7 @@ document.addEventListener('mouseenter', () => {
             scrollUpStartY = lastY;
             wasGoingDown = false;
         }
-        
+
         // Si on est en train de scroller vers le haut et le header est caché
         if (!goingDown && hidden && !wasGoingDown) {
             const scrolledUp = scrollUpStartY - currentY;
@@ -197,8 +197,8 @@ if (statementSection && statementTitle && statementText) {
     // Animate text: char by char fade in with stagger
     statementTl.fromTo(statementChars,
         { opacity: 0 },
-        { 
-            opacity: 1, 
+        {
+            opacity: 1,
             duration: 0.02,
             stagger: 0.03, // 30ms between each character
             ease: 'power1.inOut'
@@ -213,7 +213,7 @@ if (statementSection && statementTitle && statementText) {
 function setupRevealAnimations() {
     const revealElements = document.querySelectorAll('.reveal');
     const revealLeftElements = document.querySelectorAll('.reveal-left');
-    
+
     revealElements.forEach((element) => {
         gsap.to(element, {
             scrollTrigger: {
@@ -227,7 +227,7 @@ function setupRevealAnimations() {
             ease: 'power3.out'
         });
     });
-    
+
     revealLeftElements.forEach((element) => {
         gsap.to(element, {
             scrollTrigger: {
@@ -250,9 +250,9 @@ setupRevealAnimations();
 // ========================================
 const marqueeContent = document.querySelector('.marquee-content');
 if (marqueeContent) {
-    gsap.fromTo(marqueeContent, 
+    gsap.fromTo(marqueeContent,
         { x: 0 },
-        { 
+        {
             x: -marqueeContent.offsetWidth,
             duration: 20,
             ease: 'none',
@@ -301,7 +301,7 @@ gsap.from('.projects-heading', {
 // Projects — cross-fade image de fond au hover
 // ========================================
 (function () {
-    const projectBgs  = document.querySelectorAll('.project-bg');
+    const projectBgs = document.querySelectorAll('.project-bg');
     const projectList = document.getElementById('js-projects-list');
     const projectSection = document.querySelector('.projects');
     const projectItems = document.querySelectorAll('.project-item');
@@ -348,7 +348,7 @@ gsap.from('.projects-heading', {
                 gsap.killTweensOf(link);
                 link.style.opacity = '1';
             });
-            
+
             // Puis dim tous les AUTRES liens (sauf celui survolé)
             document.querySelectorAll('.project-item-link').forEach((link) => {
                 if (link.closest('.project-item') !== item) {
@@ -379,8 +379,8 @@ gsap.from('.projects-heading', {
 // Projects Heading — SplitText, glisse vers le bas au hover des liens
 // ========================================
 (function () {
-    const heading     = document.querySelector('.projects-heading');
-    const links       = document.querySelectorAll('.project-item-link');
+    const heading = document.querySelector('.projects-heading');
+    const links = document.querySelectorAll('.project-item-link');
     const projectSect = document.querySelector('.projects');
     if (!heading || !links.length) return;
 
@@ -474,7 +474,7 @@ if (parcoursTrack) {
     // ── PARALLAX ────────────────────────────────────────────────────────────
     // Images avancent légèrement plus vite que les textes (facteur ×1.3 environ)
     parcoursTrack.querySelectorAll('.parcours-bloc').forEach((bloc) => {
-        const img   = bloc.querySelector('.parcours-img-ph');
+        const img = bloc.querySelector('.parcours-img-ph');
         const imgWrap = bloc.querySelector('.parcours-img-wrap') || img;
         const texts = bloc.querySelector('.parcours-bloc-texts');
 
@@ -482,12 +482,12 @@ if (parcoursTrack) {
             trigger: bloc,
             containerAnimation: parcoursTl,
             start: 'left right',
-            end:   'right left',
+            end: 'right left',
             scrub: true,
         };
 
-        if (imgWrap)   gsap.fromTo(imgWrap,   { x: '35%' }, { x: '-35%', ease: 'none', scrollTrigger: { ...stConfig } });
-        if (texts) gsap.fromTo(texts, { x: '-18%' }, { x:  '18%', ease: 'none', scrollTrigger: { ...stConfig } });
+        if (imgWrap) gsap.fromTo(imgWrap, { x: '35%' }, { x: '-35%', ease: 'none', scrollTrigger: { ...stConfig } });
+        if (texts) gsap.fromTo(texts, { x: '-18%' }, { x: '18%', ease: 'none', scrollTrigger: { ...stConfig } });
     });
 }
 

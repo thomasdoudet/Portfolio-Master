@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Custom Cursor
 // ═══════════════════════════════════════════════════════════
 const cursor = document.getElementById('cursor');
-const ring   = document.getElementById('cursorRing');
+const ring = document.getElementById('cursorRing');
 
 if (cursor && ring) {
     let mx = 0, my = 0, rx = 0, ry = 0;
@@ -37,7 +37,7 @@ if (cursor && ring) {
     const interactives = document.querySelectorAll('a, .proj-gallery-item, .proj-strip-col li');
     interactives.forEach(el => {
         el.addEventListener('mouseenter', () => gsap.to(cursor, { width: 48, height: 48, duration: .3 }));
-        el.addEventListener('mouseleave', () => gsap.to(cursor, { width: 8,  height: 8,  duration: .3 }));
+        el.addEventListener('mouseleave', () => gsap.to(cursor, { width: 8, height: 8, duration: .3 }));
     });
 }
 
@@ -46,7 +46,11 @@ if (cursor && ring) {
 // ═══════════════════════════════════════════════════════════
 const heroTl = gsap.timeline({ delay: .3 });
 heroTl
-    .from('.proj-hero-back', { opacity: 0, x: -20, duration: .5 })
+    .from('.proj-hero-back', {
+        opacity: 0,
+        x: -20,
+        duration: .5
+    })
     .to('.proj-meta', {
         opacity: 1, y: 0,
         duration: .6,
@@ -65,35 +69,35 @@ gsap.utils.toArray('.reveal').forEach(el => {
     // Skip hero elements (animated by heroTl)
     if (el.closest('.proj-hero')) return;
 
-    gsap.fromTo(el,
-        { opacity: 0, y: 40 },
-        {
-            opacity: 1, y: 0,
-            duration: .9,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: el,
-                start: 'top 88%',
-                toggleActions: 'play none none none',
-            },
-        }
-    );
+    gsap.fromTo(el, {
+        opacity: 0,
+        y: 40
+    }, {
+        opacity: 1, y: 0,
+        duration: .9,
+        ease: 'power3.out',
+        scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            toggleActions: 'play none none none',
+        },
+    });
 });
 
 gsap.utils.toArray('.reveal-left').forEach(el => {
-    gsap.fromTo(el,
-        { opacity: 0, x: -50 },
-        {
-            opacity: 1, x: 0,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
-            },
-        }
-    );
+    gsap.fromTo(el, {
+        opacity: 0,
+        x: -50
+    }, {
+        opacity: 1, x: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+        },
+    });
 });
 
 // ═══════════════════════════════════════════════════════════
@@ -103,39 +107,39 @@ gsap.utils.toArray('.proj-fullimg-wrap').forEach(wrap => {
     const img = wrap.querySelector('img, .ph');
     if (!img) return;
 
-    gsap.fromTo(img,
-        { y: -30, scale: 1.08 },
-        {
-            y: 30, scale: 1,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: wrap,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true,
-            },
-        }
-    );
+    gsap.fromTo(img, {
+        y: -30,
+        scale: 1.08
+    }, {
+        y: 30, scale: 1,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: wrap,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+        },
+    });
 });
 
 // ═══════════════════════════════════════════════════════════
 // Gallery — stagger à l'entrée dans le viewport
 // ═══════════════════════════════════════════════════════════
 gsap.utils.toArray('.proj-gallery-item').forEach((item, i) => {
-    gsap.fromTo(item,
-        { opacity: 0, y: 30 },
-        {
-            opacity: 1, y: 0,
-            duration: .6,
-            delay: i * .06,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: item,
-                start: 'top 90%',
-                toggleActions: 'play none none none',
-            },
-        }
-    );
+    gsap.fromTo(item, {
+        opacity: 0,
+        y: 30
+    }, {
+        opacity: 1, y: 0,
+        duration: .6,
+        delay: i * .06,
+        ease: 'power2.out',
+        scrollTrigger: {
+            trigger: item,
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+        },
+    });
 });
 
 // ═══════════════════════════════════════════════════════════
