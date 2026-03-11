@@ -107,6 +107,41 @@ gsap.utils.toArray('.proj-gallery-item').forEach((item, i) => {
 });
 
 // ═══════════════════════════════════════════════════════════
+// Image Stack — mask reveal au scroll (section épinglée)
+// ═══════════════════════════════════════════════════════════
+gsap.utils.toArray('.proj-text-img--stack').forEach(section => {
+    const visual = section.querySelector('.proj-img-stack');
+    if (!visual) return;
+
+    const items = [...visual.querySelectorAll('.proj-img-stack-item')];
+    const toReveal = items.slice(1); // toutes sauf la première
+    if (!toReveal.length) return;
+
+    // État initial : items empilés, masqués par clip-path
+    gsap.set(toReveal, { clipPath: 'inset(100% 0 0% 0)' });
+
+    // Timeline : chaque image se dévoile du bas vers le haut
+    const tl = gsap.timeline();
+    toReveal.forEach(item => {
+        tl.to(item, {
+            clipPath: 'inset(0% 0 0% 0)',
+            ease: 'power2.inOut',
+            duration: 1,
+        });
+    });
+
+    // ScrollTrigger : épingle la section pendant la durée des transitions
+    ScrollTrigger.create({
+        trigger: section,
+        pin: true,
+        start: 'top top',
+        end: `+=${toReveal.length * window.innerHeight * 0.9}`,
+        animation: tl,
+        scrub: 1,
+    });
+});
+
+// ═══════════════════════════════════════════════════════════
 // Refresh ScrollTrigger
 // ═══════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {

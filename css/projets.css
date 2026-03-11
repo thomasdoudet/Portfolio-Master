@@ -61,7 +61,6 @@
     overflow: hidden;
     z-index: 2;
 }
-
 .proj-hero-img {
     position: absolute;
     inset: 0;
@@ -96,12 +95,10 @@
     inset: 0;
     background: linear-gradient(to top, var(--bg) 0%, rgba(10, 14, 26, .6) 40%, rgba(10, 14, 26, .2) 100%);
 }
-
 .proj-hero-content {
     position: relative;
     z-index: 2;
 }
-
 .proj-hero-back {
     position: absolute;
     top: 6.25rem;
@@ -126,9 +123,12 @@
     transition: width .3s;
     flex-shrink: 0;
 }
-.proj-hero-back:hover { color: var(--cream); }
-.proj-hero-back:hover::before { width: 48px; }
-
+.proj-hero-back:hover {
+    color: var(--cream);
+}
+.proj-hero-back:hover::before {
+    width: 48px;
+}
 .proj-meta {
     display: flex;
     gap: 2.5rem;
@@ -181,10 +181,28 @@
     position: absolute;
     background: var(--line-num);
 }
-.proj-corner::before { width: 100%; height: 1px; top: 0; left: 0; }
-.proj-corner::after  { width: 1px; height: 100%; top: 0; left: 0; }
-.proj-corner.br { bottom: 5rem; right: 5rem; transform: rotate(180deg); }
-.proj-corner.bl { bottom: 5rem; left: 5rem; transform: rotate(270deg); }
+.proj-corner::before {
+    width: 100%;
+    height: 1px;
+    top: 0;
+    left: 0;
+}
+.proj-corner::after {
+    width: 1px;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+.proj-corner.br {
+    bottom: 5rem;
+    right: 5rem;
+    transform: rotate(180deg);
+}
+.proj-corner.bl {
+    bottom: 5rem;
+    left: 5rem;
+    transform: rotate(270deg);
+}
 
 /* ─── STATEMENT ─────────────────────────────────────────────── */
 .proj-statement {
@@ -274,7 +292,9 @@
     padding: 0.5rem 0;
     border-bottom: 1px solid var(--line);
 }
-.proj-strip-col li:last-child { border-bottom: none; }
+.proj-strip-col li:last-child {
+    border-bottom: none;
+}
 
 /* ─── IMAGE CORNERS ─────────────────────────────────────────── */
 .img-corner {
@@ -288,12 +308,37 @@
     position: absolute;
     background: var(--line-num);
 }
-.img-corner::before { width: 100%; height: 1px; top: 0; left: 0; }
-.img-corner::after  { width: 1px; height: 100%; top: 0; left: 0; }
-.img-corner.tl { top: 12px; left: 12px; }
-.img-corner.tr { top: 12px; right: 12px; transform: rotate(90deg); }
-.img-corner.bl { bottom: 12px; left: 12px; transform: rotate(270deg); }
-.img-corner.br { bottom: 12px; right: 12px; transform: rotate(180deg); }
+.img-corner::before {
+    width: 100%;
+    height: 1px;
+    top: 0;
+    left: 0;
+}
+.img-corner::after {
+    width: 1px;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+.img-corner.tl {
+    top: 12px;
+    left: 12px;
+}
+.img-corner.tr {
+    top: 12px;
+    right: 12px;
+    transform: rotate(90deg);
+}
+.img-corner.bl {
+    bottom: 12px;
+    left: 12px;
+    transform: rotate(270deg);
+}
+.img-corner.br {
+    bottom: 12px;
+    right: 12px;
+    transform: rotate(180deg);
+}
 
 /* ─── FULL-WIDTH IMAGE ──────────────────────────────────────── */
 .proj-fullimg {
@@ -364,9 +409,12 @@
     gap: 5rem;
     align-items: center;
 }
-.proj-text-img.reverse { direction: rtl; }
-.proj-text-img.reverse > * { direction: ltr; }
-
+.proj-text-img.reverse {
+    direction: rtl;
+}
+.proj-text-img.reverse > * {
+    direction: ltr;
+}
 .proj-text-img-content {
     max-width: 520px;
 }
@@ -385,8 +433,9 @@
     line-height: 1.8;
     color: var(--muted);
 }
-.proj-text-img-content p + p { margin-top: 1rem; }
-
+.proj-text-img-content p + p {
+    margin-top: 1rem;
+}
 .proj-text-img-visual {
     position: relative;
     overflow: hidden;
@@ -479,7 +528,9 @@
     background: linear-gradient(135deg, #0f1a15 0%, #0a1820 60%, #15100a 100%);
 }
 .proj-gallery-item:hover img,
-.proj-gallery-item:hover .ph { transform: scale(1.05); }
+.proj-gallery-item:hover .ph {
+    transform: scale(1.05);
+}
 .proj-gallery-item::after {
     content: '';
     position: absolute;
@@ -538,7 +589,37 @@
     text-decoration: none;
     transition: opacity .3s;
 }
-.proj-next a:hover { opacity: .6; }
+.proj-next a:hover {
+    opacity: .6;
+}
+
+/* ─── IMAGE STACK (scroll mask reveal) ─────────────────────── */
+.proj-text-img--stack {
+    align-items: center;
+    height: 100vh;
+}
+
+.proj-img-stack {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 2 / 3;
+    width: 100%;
+    max-height: calc(100vh - 8rem);
+}
+
+.proj-img-stack-item {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    will-change: clip-path;
+}
+
+.proj-img-stack-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
 
 /* ─── RESPONSIVE ────────────────────────────────────────────── */
 @media (max-width: 768px) {
