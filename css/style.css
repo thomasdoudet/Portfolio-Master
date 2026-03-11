@@ -26,6 +26,11 @@
     box-sizing: border-box;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -34,9 +39,10 @@ body {
     background: var(--bg);
     color: var(--cream);
     font-family: var(--sans);
-    font-size: 15px;
+    font-size: 1rem;
     line-height: 1.6;
     overflow-x: hidden;
+    cursor: none;
 }
 
 /* Grain global — fixed, couvre toute la page sans perturber le layout */
@@ -48,6 +54,11 @@ body::after {
     opacity: 0.1;
     pointer-events: none;
     z-index: 9999;
+}
+
+img,
+video {
+    width: 100%;
 }
 
 /* ===================================
@@ -75,11 +86,11 @@ body::after {
 /* Top label — just below the nav bar (nav: padding 40px + ~22px content + 40px ≈ 102px) */
 .grid-num {
     position: absolute;
-    top: 112px;
+    top: 7rem;
     left: -6px;
     transform: translateX(-100%);
     font-family: var(--sans);
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 400;
     color: var(--line-num);
     letter-spacing: 0.12em;
@@ -89,7 +100,7 @@ body::after {
 /* Bottom label — mirrored near viewport bottom */
 .grid-num--bottom {
     top: auto;
-    bottom: 28px;
+    bottom: 1.75rem;
 }
 
 /* Corner crosshair markers at line-1 and line-5 × top and bottom edges */
@@ -142,13 +153,14 @@ body::after {
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
 }
 
 .cursor-ring {
     position: fixed;
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--cream);
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(245, 230, 200, .4);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
@@ -163,7 +175,7 @@ body::after {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 20px 80px;
+    padding: 1.25rem 5rem;
     background: transparent;
     z-index: 1000;
     border-bottom: 1px solid transparent;
@@ -180,7 +192,7 @@ body::after {
 
 .logo {
     font-family: var(--sans);
-    font-size: 16px;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 500;
     letter-spacing: 0.08em;
@@ -189,11 +201,11 @@ body::after {
 
 .nav-links {
     display: flex;
-    gap: 40px;
+    gap: 2.5rem;
 }
 
 .nav-links a {
-    font-size: 12px;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--muted);
@@ -220,7 +232,7 @@ main {
     height: 100vh;
     display: flex;
     align-items: center;
-    padding: 0 80px;
+    padding: 0 5rem;
     position: relative;
     background: var(--bg);
     overflow: hidden;
@@ -274,7 +286,7 @@ main {
     font-family: var(--sans);
     font-style: normal;           /* carton-titre : pas italic */
     font-weight: 500;
-    font-size: clamp(120px, 14vw, 200px);
+    font-size: clamp(7.5rem, 14vw, 12.5rem);
     text-transform: uppercase;
     color: var(--cream);
     line-height: 0.9;
@@ -288,7 +300,7 @@ main {
 .hero-title-row1 {
     display: flex;
     align-items: baseline;
-    gap: 32px;
+    gap: 2rem;
 }
 
 /* Ligne 2 : "DOUDET" indenté vers la droite */
@@ -304,7 +316,7 @@ main {
     height: 1.4em;
     overflow: hidden; /* must clip the overflowing inner stack */
     font-family: var(--serif);
-    font-size: clamp(26px, 3vw, 42px);
+    font-size: clamp(1.625rem, 3vw, 2.625rem);
     font-style: italic;
     font-weight: 300;
     color: var(--cream);
@@ -330,20 +342,20 @@ main {
 /* Scroll indicator — bas centre */
 .hero-scroll {
     position: absolute;
-    bottom: 40px;
+    bottom: 2.5rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 0.625rem;
     z-index: 2;
     opacity: 0; /* GSAP anime l'entrée */
 }
 
 .hero-scroll-label {
     font-family: var(--sans);
-    font-size: 10px;
+    font-size: 0.625rem;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: var(--line-num);
@@ -353,7 +365,7 @@ main {
 
 .hero-scroll-bar {
     width: 1px;
-    height: 40px;
+    height: 2.5rem;
     background: var(--line-num);
     overflow: hidden;
     position: relative;
@@ -382,7 +394,7 @@ main {
    STATEMENT SECTION (First)
    =================================== */
 .statement {
-    padding: 120px 80px;
+    padding: 7.5rem 5rem;
     text-align: center;
     position: relative;
     z-index: 10;
@@ -390,15 +402,15 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 3.75rem;
 }
 
 .statement-title {
     font-family: var(--serif);
-    font-size: clamp(36px, 8vw, 72px);
+    font-size: clamp(2.25rem, 8vw, 4.5rem);
     font-style: italic;
     font-weight: 300;
     line-height: 1.2;
-    margin-bottom: 60px;
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
@@ -407,7 +419,7 @@ main {
 .statement-text {
     max-width: 720px;
     margin: 0 auto;
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.75;
     color: var(--muted);
 }
@@ -416,23 +428,23 @@ main {
    ABOUT SECTION
    =================================== */
 .about {
-    padding: 120px 80px;
+    padding: 7.5rem 5rem;
     position: relative;
     z-index: 10;
 }
 
 .eyebrow {
     text-align: center;
-    font-size: 10px;
+    font-size: 0.625rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     color: var(--line-num);
-    margin-bottom: 60px;
+    margin-bottom: 3.75rem;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 1.25rem;
 }
 
 .eyebrow::before,
@@ -447,7 +459,7 @@ main {
 .about-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 3.75rem;
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
@@ -456,7 +468,7 @@ main {
 .about-images {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 1.25rem;
     min-height: 400px;
 }
 
@@ -494,42 +506,42 @@ main {
 
 .about-title {
     font-family: var(--serif);
-    font-size: clamp(32px, 6vw, 48px);
+    font-size: clamp(2rem, 6vw, 3rem);
     font-style: italic;
     font-weight: 300;
-    margin-bottom: 40px;
+    margin-bottom: 2.5rem;
 }
 
 .about-bio {
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.75;
     color: var(--muted);
-    margin-bottom: 60px;
+    margin-bottom: 3.75rem;
 }
 
 .about-skills {
     border-top: 1px solid var(--line);
-    padding-top: 40px;
+    padding-top: 2.5rem;
 }
 
 .about-skills h3 {
     font-family: var(--sans);
-    font-size: 11px;
+    font-size: 0.6875rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--line-num);
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
     font-weight: 500;
 }
 
 .skills-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px 32px;
+    gap: 1rem 2rem;
 }
 
 .skills-list span {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: var(--muted);
 }
 
@@ -558,7 +570,7 @@ main {
 
 .parcours-hero-text {
     font-family: var(--serif);
-    font-size: clamp(140px, 22vw, 320px);
+    font-size: clamp(8.75rem, 22vw, 20rem);
     font-style: italic;
     font-weight: 300;
     color: var(--cream);   /* état initial — GSAP anime vers rgba(245,230,200,0.25) */
@@ -603,7 +615,7 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-right: 280px;
+    padding-right: 17.5rem;
     position: relative;
 }
 
@@ -651,7 +663,7 @@ main {
 
 /* Textes — chevauchent légèrement le bas de l'image */
 .parcours-bloc-texts {
-    margin-top: -28px;
+    margin-top: -1.75rem;
     position: relative;
     z-index: 2;
     will-change: transform;
@@ -659,27 +671,27 @@ main {
 
 .parcours-bloc-title {
     font-family: var(--serif);
-    font-size: clamp(64px, 7vw, 92px);
+    font-size: clamp(4rem, 7vw, 5.75rem);
     font-style: italic;
     font-weight: 300;
     line-height: 0.88;
     color: var(--cream);
-    margin-bottom: 14px;
+    margin-bottom: 0.875rem;
     white-space: nowrap;
 }
 
 .parcours-bloc-year {
     font-family: var(--sans);
-    font-size: 10px;
+    font-size: 0.625rem;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: var(--line-num);
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
     font-weight: 400;
 }
 
 .parcours-bloc-text {
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.65;
     color: var(--muted);
     max-width: 480px;
@@ -726,7 +738,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 24px;
+    gap: 1.5rem;
     text-align: right;
     position: relative;
     z-index: 2;
@@ -738,7 +750,7 @@ main {
     font-family: var(--sans);
     font-style: normal;
     font-weight: 500;
-    font-size: clamp(28px, 3.5vw, 56px);
+    font-size: clamp(1.75rem, 3.5vw, 3.5rem);
     letter-spacing: -0.02em;
     color: var(--cream);
     text-decoration: none;
@@ -785,7 +797,7 @@ main {
    MARQUEE SECTION
    =================================== */
 .marquee-section {
-    padding: 60px 80px;
+    padding: 3.75rem 5rem;
     position: relative;
     z-index: 10;
     overflow: hidden;
@@ -798,10 +810,10 @@ main {
 
 .marquee-content {
     display: flex;
-    gap: 20px;
+    gap: 1.25rem;
     white-space: nowrap;
     font-family: var(--serif);
-    font-size: 32px;
+    font-size: 2rem;
     font-style: italic;
     font-weight: 300;
     color: var(--muted);
@@ -821,7 +833,7 @@ main {
    CONTACT SECTION
    =================================== */
 .contact {
-    padding: 120px 80px;
+    padding: 7.5rem 5rem;
     text-align: center;
     position: relative;
     z-index: 10;
@@ -834,28 +846,28 @@ main {
 
 .contact-title {
     font-family: var(--serif);
-    font-size: clamp(48px, 10vw, 96px);
+    font-size: clamp(3rem, 10vw, 6rem);
     font-style: italic;
     font-weight: 300;
     line-height: 1.1;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 }
 
 .contact-subtitle {
-    font-size: 18px;
+    font-size: 1.125rem;
     color: var(--muted);
-    margin-bottom: 40px;
+    margin-bottom: 2.5rem;
 }
 
 .contact-email {
     display: inline-block;
-    font-size: 20px;
+    font-size: 1.25rem;
     text-transform: lowercase;
     color: var(--cream);
     text-decoration: none;
     border-bottom: 1px solid var(--cream);
-    margin-bottom: 60px;
-    padding-bottom: 8px;
+    margin-bottom: 3.75rem;
+    padding-bottom: 0.5rem;
     transition: opacity 0.3s ease;
 }
 
@@ -866,11 +878,11 @@ main {
 .contact-socials {
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 2.5rem;
 }
 
 .social-link {
-    font-size: 12px;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--muted);
@@ -886,7 +898,7 @@ main {
    FOOTER
    =================================== */
 .footer {
-    padding: 40px 80px;
+    padding: 2.5rem 5rem;
     border-top: 1px solid var(--accent);
     position: relative;
     z-index: 10;
@@ -894,7 +906,7 @@ main {
 
 .footer p {
     text-align: center;
-    font-size: 12px;
+    font-size: 0.75rem;
     color: var(--muted);
 }
 
@@ -916,46 +928,46 @@ main {
    =================================== */
 @media (max-width: 768px) {
     .navbar {
-        padding: 14px 32px;
+        padding: 0.875rem 2rem;
     }
 
     .hero {
-        padding: 0 32px;
+        padding: 0 2rem;
     }
 
     .hero-name-line {
-        font-size: clamp(72px, 16vw, 120px);
+        font-size: clamp(4.5rem, 16vw, 7.5rem);
     }
 
     .hero-role {
-        font-size: clamp(18px, 4vw, 28px);
-        height: clamp(18px, 4vw, 28px);
+        font-size: clamp(1.125rem, 4vw, 1.75rem);
+        height: clamp(1.125rem, 4vw, 1.75rem);
     }
 
     .statement,
     .about,
     .contact {
-        padding: 80px 40px;
+        padding: 5rem 2.5rem;
     }
 
     .projects {
-        padding: 100px 32px 32px;
+        padding: 6.25rem 2rem 2rem;
         height: auto;
         min-height: 100vh;
     }
 
     .projects-list {
-        gap: 20px;
+        gap: 1.25rem;
     }
 
     .project-item-link {
-        font-size: clamp(22px, 6vw, 40px);
+        font-size: clamp(1.375rem, 6vw, 2.5rem);
     }
 
 
     .about-container {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 2.5rem;
     }
 
     .project-card {
@@ -968,21 +980,21 @@ main {
     }
 
     .parcours {
-        padding: 80px 40px;
+        padding: 5rem 2.5rem;
     }
 
     .parcours-scroll-container {
-        margin: 0 -40px;
-        padding: 0 40px;
+        margin: 0 -2.5rem;
+        padding: 0 2.5rem;
     }
 
     .parcours-track {
-        gap: 60px;
+        gap: 3.75rem;
     }
 
     .parcours-bloc {
         width: 300px;
-        padding: 40px 0;
+        padding: 2.5rem 0;
     }
 
     .parcours-bloc-main {
@@ -990,11 +1002,11 @@ main {
     }
 
     .parcours-bloc-title {
-        font-size: 80px;
+        font-size: 5rem;
     }
 
     .parcours-bloc-title-main {
-        font-size: 100px;
+        font-size: 6.25rem;
     }
 
     .parcours-image-1,
@@ -1070,10 +1082,10 @@ body.page-travaux {
    Occupies space between nav and the decorative heading */
 .project-list {
     position: absolute;
-    top: 112px;
-    left: 80px;
+    top: 7rem;
+    left: 5rem;
     right: 0;
-    bottom: 210px;
+    bottom: 13.125rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1089,7 +1101,7 @@ body.page-travaux {
 .project-item {
     display: flex;
     align-items: baseline;
-    gap: 18px;
+    gap: 1.125rem;
     text-decoration: none;
     color: inherit;
     will-change: opacity;
@@ -1100,7 +1112,7 @@ body.page-travaux {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(38px, 3.6vw, 54px);
+    font-size: clamp(2.375rem, 3.6vw, 3.375rem);
     color: var(--cream);
     line-height: 1.05;
     letter-spacing: -0.01em;
@@ -1109,7 +1121,7 @@ body.page-travaux {
 /* Year: small uppercase Space Grotesk */
 .project-year {
     font-family: var(--sans);
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 400;
     color: var(--muted);
     text-transform: uppercase;
@@ -1121,12 +1133,12 @@ body.page-travaux {
 /* ── Decorative H1 at bottom-left ── */
 .travaux-heading {
     position: absolute;
-    bottom: 52px;
-    left: 80px;
+    bottom: 3.25rem;
+    left: 5rem;
     font-family: var(--serif);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(88px, 9vw, 130px);
+    font-size: clamp(5.5rem, 9vw, 8.125rem);
     color: var(--cream);
     line-height: 0.88;
     letter-spacing: -0.02em;
@@ -1138,15 +1150,15 @@ body.page-travaux {
 /* ── Right-side project count label ── */
 .travaux-right-label {
     position: fixed;
-    right: 80px;
-    bottom: 80px;
+    right: 5rem;
+    bottom: 5rem;
     z-index: 11;
     pointer-events: none;
 }
 
 .travaux-count {
     font-family: var(--sans);
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 400;
     color: var(--line-num);
     text-transform: uppercase;
@@ -1156,7 +1168,7 @@ body.page-travaux {
 /* ── Active project name shown on the right ── */
 .travaux-active-label {
     position: fixed;
-    right: 80px;
+    right: 5rem;
     top: 50%;
     transform: translateY(-50%);
     z-index: 11;
@@ -1166,19 +1178,19 @@ body.page-travaux {
 
 .travaux-active-category {
     font-family: var(--sans);
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 400;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
 }
 
 .travaux-active-index {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 300;
-    font-size: 72px;
+    font-size: 4.5rem;
     color: var(--cream);
     line-height: 1;
     opacity: 0.08;

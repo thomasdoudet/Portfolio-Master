@@ -3,43 +3,45 @@
  * Charger APRÈS les CDN GSAP (gsap.min.js + ScrollTrigger.min.js)
  */
 
-gsap.registerPlugin(ScrollTrigger);
-
 // ═══════════════════════════════════════════════════════════
-// Custom Cursor
+// Navbar — masquer au scroll bas, réapparaître au scroll haut
 // ═══════════════════════════════════════════════════════════
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
+(function () {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
 
-if (cursor && ring) {
-    let mx = 0, my = 0, rx = 0, ry = 0;
+    let lastY = window.scrollY;
+    let wasGoingDown = false;
+    let scrollUpStartY = 0;
+    let hidden = false;
+    const SCROLL_UP_THRESHOLD = 300;
 
-    window.addEventListener('mousemove', e => {
-        mx = e.clientX;
-        my = e.clientY;
-        gsap.to(cursor, { x: mx, y: my, duration: 0 });
-    });
+    window.addEventListener('scroll', () => {
+        const currentY = window.scrollY;
+        const goingDown = currentY > lastY;
 
-    gsap.ticker.add(() => {
-        rx += (mx - rx) * 0.12;
-        ry += (my - ry) * 0.12;
-        gsap.set(ring, { x: rx, y: ry });
-    });
+        if (goingDown) {
+            if (!wasGoingDown && currentY > 80 && !hidden) {
+                gsap.to(navbar, { y: '-100%', opacity: 0, duration: 0.35, ease: 'power2.in' });
+                hidden = true;
+            }
+            wasGoingDown = true;
+        } else if (!goingDown && wasGoingDown) {
+            scrollUpStartY = lastY;
+            wasGoingDown = false;
+        }
 
-    document.addEventListener('mouseleave', () => {
-        gsap.to([cursor, ring], { opacity: 0, duration: .3 });
-    });
-    document.addEventListener('mouseenter', () => {
-        gsap.to([cursor, ring], { opacity: 1, duration: .3 });
-    });
+        if (!goingDown && hidden && !wasGoingDown) {
+            const scrolledUp = scrollUpStartY - currentY;
+            if (scrolledUp >= SCROLL_UP_THRESHOLD) {
+                gsap.to(navbar, { y: '0%', opacity: 1, duration: 0.45, ease: 'power3.out' });
+                hidden = false;
+            }
+        }
 
-    // Expand cursor on interactive elements
-    const interactives = document.querySelectorAll('a, .proj-gallery-item, .proj-strip-col li');
-    interactives.forEach(el => {
-        el.addEventListener('mouseenter', () => gsap.to(cursor, { width: 48, height: 48, duration: .3 }));
-        el.addEventListener('mouseleave', () => gsap.to(cursor, { width: 8, height: 8, duration: .3 }));
-    });
-}
+        lastY = currentY;
+    }, { passive: true });
+}());
 
 // ═══════════════════════════════════════════════════════════
 // Hero Entrance Animation
@@ -61,44 +63,6 @@ heroTl
         duration: .9,
         ease: 'power3.out',
     }, '-=.4');
-
-// ═══════════════════════════════════════════════════════════
-// Scroll Reveals — .reveal (fade up) + .reveal-left (fade left)
-// ═══════════════════════════════════════════════════════════
-gsap.utils.toArray('.reveal').forEach(el => {
-    // Skip hero elements (animated by heroTl)
-    if (el.closest('.proj-hero')) return;
-
-    gsap.fromTo(el, {
-        opacity: 0,
-        y: 40
-    }, {
-        opacity: 1, y: 0,
-        duration: .9,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: el,
-            start: 'top 88%',
-            toggleActions: 'play none none none',
-        },
-    });
-});
-
-gsap.utils.toArray('.reveal-left').forEach(el => {
-    gsap.fromTo(el, {
-        opacity: 0,
-        x: -50
-    }, {
-        opacity: 1, x: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-        },
-    });
-});
 
 // ═══════════════════════════════════════════════════════════
 // Parallax — images pleine largeur
