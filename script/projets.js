@@ -80,46 +80,106 @@ heroTl
     }, '-=.4');
 
 // ═══════════════════════════════════════════════════════════
-// Parallax — images pleine largeur
+// Hero Scroll Exit — masque textes → zoom média → fondu fond
 // ═══════════════════════════════════════════════════════════
-gsap.utils.toArray('.proj-fullimg-wrap').forEach(wrap => {
-    const img = wrap.querySelector('img, .ph');
-    if (!img) return;
+(function () {
+    const hero        = document.querySelector('.proj-hero');
+    const heroImg     = document.querySelector('.proj-hero-img');
+    const heroBack    = document.querySelector('.proj-hero-back');
+    const heroMeta    = document.querySelector('.proj-meta');
+    const heroTitle   = document.querySelector('.proj-hero-title');
+    const heroCorners = document.querySelectorAll('.proj-corner');
 
-    gsap.fromTo(img, {
-        y: -30,
-        scale: 1.08
-    }, {
-        y: 30, scale: 1,
+    if (!hero || !heroImg) return;
+
+    // Wrapper overflow:hidden autour d'un élément (effet masque)
+    // paddingTop/Bottom en px : compense les jambages qui dépassent la boîte de layout
+    // margin-top négatif : compense le padding-top pour ne pas décaler le layout
+    function maskWrap(el, pt, pb) {
+        if (!el) return;
+        const wrap = document.createElement('div');
+        wrap.style.cssText = `overflow:hidden;`;
+        el.parentNode.insertBefore(wrap, el);
+        wrap.appendChild(el);
+    }
+    maskWrap(heroMeta,  4, 12);
+    maskWrap(heroTitle, 16, 40);
+
+    // Cible le media pour le zoom (img, vidéo, iframe, ou placeholder)
+    const media = heroImg.querySelector('img, video, iframe, .ph') || heroImg;
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: '+=130%',
+            pin: true,
+            scrub: 1.2,
+            anticipatePin: 1,
+            toggleActions: 'play none none reverse',
+        }
+    });
+
+    // Phase 1 — Textes glissent vers le bas (derrière masques overflow:hidden)
+    // fromTo explicit : évite que GSAP capture les valeurs avant la fin de l'animation d'entrée
+    tl.fromTo([heroBack, ...heroCorners],
+        { opacity: 1 },
+        { opacity: 0, duration: 0.28, ease: 'power2.in' }
+    )
+    .fromTo(heroMeta,
+        { y: 0 },
+        { y: '130%', duration: 0.38, ease: 'power3.in' },
+        '<'
+    )
+    .fromTo(heroTitle,
+        { y: 0 },
+        { y: '150%', duration: 0.38, ease: 'power3.in' },
+        "<+=0.1"
+    )
+
+    // Phase 2 — Zoom sur le média
+    .to(media, {
+        scale: 1.75,
+        duration: 1,
         ease: 'none',
-        scrollTrigger: {
-            trigger: wrap,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-        }
-    });
-});
+    })
+
+    // Phase 3 — Fondu du fond → révèle la couleur de fond
+    .to(heroImg, {
+        opacity: 0,
+        duration: 0.38,
+        ease: 'none',
+    }, "<+=0.1");
+}());
 
 // ═══════════════════════════════════════════════════════════
-// Gallery — stagger à l'entrée dans le viewport
+// Statement — entrée cinématique (remplace le .reveal générique)
 // ═══════════════════════════════════════════════════════════
-gsap.utils.toArray('.proj-gallery-item').forEach((item, i) => {
-    gsap.fromTo(item, {
-        opacity: 0,
-        y: 30
+(function () {
+    const stmt = document.querySelector('.proj-statement');
+    if (!stmt) return;
+
+    gsap.set(stmt, {
+        opacity: 0
+    });
+
+    gsap.fromTo(stmt, {
+        opacity: 0
     }, {
-        opacity: 1, y: 0,
-        duration: .6,
-        delay: i * .06,
-        ease: 'power2.out',
+        opacity: 1,
+        ease: 'power2.inOut',
+        overwrite: true,
         scrollTrigger: {
-            trigger: item,
-            start: 'top 90%',
-            toggleActions: 'play none none none',
+            trigger: stmt,
+            start: 'top top',
+            end: '+=75%',
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+            markers: true,
         }
     });
-});
+}());
 
 // ═══════════════════════════════════════════════════════════
 // Image Stack — mask reveal au scroll (section épinglée)
@@ -159,101 +219,24 @@ gsap.utils.toArray('.proj-text-img--stack').forEach(section => {
 });
 
 // ═══════════════════════════════════════════════════════════
-// Hero Scroll Exit — masque textes → zoom média → fondu fond
+// Gallery — stagger à l'entrée dans le viewport
 // ═══════════════════════════════════════════════════════════
-(function () {
-    const hero        = document.querySelector('.proj-hero');
-    const heroImg     = document.querySelector('.proj-hero-img');
-    const heroBack    = document.querySelector('.proj-hero-back');
-    const heroMeta    = document.querySelector('.proj-meta');
-    const heroTitle   = document.querySelector('.proj-hero-title');
-    const heroCorners = document.querySelectorAll('.proj-corner');
-
-    if (!hero || !heroImg) return;
-
-    // Wrapper overflow:hidden autour d'un élément (effet masque)
-    // paddingTop/Bottom en px : compense les jambages qui dépassent la boîte de layout
-    // margin-top négatif : compense le padding-top pour ne pas décaler le layout
-    function maskWrap(el, pt, pb) {
-        if (!el) return;
-        const wrap = document.createElement('div');
-        wrap.style.cssText = `overflow:hidden; padding-top:${pt}px; padding-bottom:${pb}px; margin-top:-${pt}px;`;
-        el.parentNode.insertBefore(wrap, el);
-        wrap.appendChild(el);
-    }
-    maskWrap(heroMeta,  4, 12);
-    maskWrap(heroTitle, 16, 40);
-
-    // Cible le media pour le zoom (img, vidéo, iframe, ou placeholder)
-    const media = heroImg.querySelector('img, video, iframe, .ph') || heroImg;
-
-    const tl = gsap.timeline({
+gsap.utils.toArray('.proj-gallery-item').forEach((item, i) => {
+    gsap.fromTo(item, {
+        opacity: 0,
+        y: 30
+    }, {
+        opacity: 1, y: 0,
+        duration: .6,
+        delay: i * .06,
+        ease: 'power2.out',
         scrollTrigger: {
-            trigger: hero,
-            start: 'top top',
-            end: '+=130%',
-            pin: true,
-            scrub: 1.2,
-            anticipatePin: 1,
-            markers: true,
+            trigger: item,
+            start: 'top 90%',
+            toggleActions: 'play none none none',
         }
     });
-
-    // Phase 1 — Textes glissent vers le bas (derrière masques overflow:hidden)
-    // fromTo explicit : évite que GSAP capture les valeurs avant la fin de l'animation d'entrée
-    tl.fromTo([heroBack, ...heroCorners],
-        { opacity: 1 },
-        { opacity: 0, duration: 0.28, ease: 'power2.in' }
-    )
-    .fromTo(heroMeta,
-        { y: 0 },
-        { y: '130%', duration: 0.38, ease: 'power3.in' },
-        '<'
-    )
-    .fromTo(heroTitle,
-        { y: 0 },
-        { y: '150%', duration: 0.38, ease: 'power3.in' },
-        "<+=0.1"
-    )
-
-    // Phase 2 — Zoom sur le média
-    .to(media, {
-        scale: 1.5,
-        duration: 0.45,
-        ease: 'none',
-    }, 0.32)
-
-    // Phase 3 — Fondu du fond → révèle la couleur de fond
-    .to(heroImg, {
-        opacity: 0,
-        duration: 0.38,
-        ease: 'none',
-    }, 0.65);
-}());
-
-// ═══════════════════════════════════════════════════════════
-// Statement — entrée cinématique (remplace le .reveal générique)
-// ═══════════════════════════════════════════════════════════
-(function () {
-    const stmt = document.querySelector('.proj-statement-text');
-    if (!stmt) return;
-
-    gsap.fromTo(stmt,
-        { opacity: 0, y: 20 },
-        {
-            opacity: 1,
-            y: 0,
-            duration: 1.4,
-            ease: 'power3.out',
-            overwrite: true,
-            scrollTrigger: {
-                trigger: stmt,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-            }
-        }
-    );
-}());
+});
 
 // ═══════════════════════════════════════════════════════════
 // Refresh ScrollTrigger

@@ -210,9 +210,10 @@
 .proj-statement {
     position: relative;
     z-index: 2;
-    padding: 7.5rem 5rem;
     display: flex;
     justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 .proj-statement-text {
     font-family: var(--serif);
