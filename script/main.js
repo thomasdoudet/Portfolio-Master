@@ -161,6 +161,38 @@ if (roleInner && roleItems.length > 1) {
 }
 
 // ========================================
+// Hero — zoom-out au scroll
+// ========================================
+const tlHeroBanner = gsap.timeline({
+    scrollTrigger: {
+        trigger: '#hero',
+        pin: true,
+        start: 'top top',
+        end: '+=100%',
+        scrub: 1,
+        anticipatePin: 1,
+    }
+});
+tlHeroBanner
+    .fromTo('.hero-title', {
+        scale: 1,
+        opacity: 1
+    }, {
+        scale: 1.65,
+        opacity: 0,
+        duration: 1,
+        ease: 'power2.out',
+        overwrite: 'auto'
+    }, 0)
+    .fromTo('.hero-scroll', {
+        opacity: 1
+    }, {
+        opacity: 0,
+        duration: 1,
+        overwrite: 'auto'
+    }, 0);
+
+// ========================================
 // Statement Section — Pin + Animated Text Reveal (char by char)
 // ========================================
 const statementSection = document.querySelector('.statement');
@@ -283,18 +315,7 @@ if (projectItems.length > 0) {
     });
 }
 
-// "Mes Projets" — slide up depuis le bas
-gsap.from('.projects-heading', {
-    opacity: 0,
-    y: 60,
-    duration: 1.0,
-    ease: 'power3.out',
-    scrollTrigger: {
-        trigger: '.projects',
-        start: 'top 60%',
-        toggleActions: 'play none none none',
-    },
-});
+
 
 
 // ========================================
@@ -376,7 +397,7 @@ gsap.from('.projects-heading', {
 }());
 
 // ========================================
-// Projects Heading — SplitText, glisse vers le bas au hover des liens
+// Projects Heading — SplitText entrée + hover
 // ========================================
 (function () {
     const heading = document.querySelector('.projects-heading');
@@ -384,53 +405,81 @@ gsap.from('.projects-heading', {
     const projectSect = document.querySelector('.projects');
     if (!heading || !links.length) return;
 
-    // Attendre que SplitText soit disponible (chargement CDN async possible)
-    function init() {
-        if (typeof SplitText === 'undefined') {
-            setTimeout(init, 100);
-            return;
-        }
-
-        const split = new SplitText(heading, { type: 'chars', charsClass: 'ph-char' });
-        const chars = split.chars;
+    // Attendre les polices : fluid-text.js a déjà calculé le font-size final
+    document.fonts.ready.then(() => {
         let hidden = false;
 
-        function hideHeading() {
-            if (hidden) return;
-            hidden = true;
-            gsap.killTweensOf(chars);
-            gsap.to(chars, {
-                y: '115%',
-                duration: 0.5,
-                ease: 'power3.in',
-                stagger: { each: 0.016, from: 'start' },
-            });
-        }
+        SplitText.create(heading, {
+            type: 'chars,words',
+            charsClass: 'ph-char',
+            onSplit(self) {
+                const chars = self.chars;
 
-        function showHeading() {
-            if (!hidden) return;
-            hidden = false;
-            gsap.killTweensOf(chars);
-            gsap.to(chars, {
-                y: '0%',
-                duration: 0.6,
-                ease: 'power3.out',
-                stagger: { each: 0.016, from: 'end' },
-            });
-        }
+                // — Entrée au scroll —
+                const entryTween = gsap.from(chars, {
+                    yPercent: 110,
+                    duration: 0.9,
+                    ease: 'power3.out',
+                    stagger: {
+                        each: 0.08,
+                        from: 'start'
+                    },
+                    scrollTrigger: {
+                        trigger: '.projects',
+                        start: 'top top',
+                        toggleActions: 'play none none none',
+                    }
+                });
 
-        // Mouseenter sur chaque lien → cache le heading
-        links.forEach((link) => {
-            link.addEventListener('mouseenter', hideHeading);
+                // — Hover —
+                function hideHeading() {
+                    if (hidden) return;
+                    hidden = true;
+                    gsap.killTweensOf(chars);
+                    gsap.to(chars, {
+                        yPercent: 115,
+                        duration: 0.5,
+                        ease: 'power3.in',
+                        stagger: {
+                            each: 0.03,
+                            from: 'start'
+                        }
+                    });
+                }
+                function showHeading() {
+                    if (!hidden) return;
+                    hidden = false;
+                    gsap.killTweensOf(chars);
+                    gsap.to(chars, {
+                        yPercent: 0,
+                        duration: 0.5,
+                        ease: 'power3.out',
+                        stagger: {
+                            each: 0.03,
+                            from: 'end'
+                        }
+                    });
+                }
+
+                let leaveTimer = null;
+                let enterTimer = null;
+                links.forEach(link => {
+                    link.addEventListener('mouseenter', () => {
+                        clearTimeout(leaveTimer);
+                        clearTimeout(enterTimer);
+                        enterTimer = setTimeout(hideHeading, 50);
+                    });
+                    link.addEventListener('mouseleave', () => {
+                        clearTimeout(enterTimer);
+                        leaveTimer = setTimeout(showHeading, 300);
+                    });
+                });
+                if (projectSect) projectSect.addEventListener('mouseleave', showHeading);
+
+                return entryTween;
+            },
         });
-
-        // Mouseleave de la section entière → remet le heading
-        if (projectSect) {
-            projectSect.addEventListener('mouseleave', showHeading);
-        }
-    }
-
-    init();
+    });
 }());
 
 // ========================================
@@ -491,14 +540,35 @@ if (parcoursTrack) {
     });
 }
 
-// Projects — pin à l'entrée (après parcours pour que pinSpacing soit calculé)
-ScrollTrigger.create({
-    trigger: ".projects",
-    start: "top top",
-    end: "+=600",
-    pin: true,
-    pinSpacing: true,
-});
+// Projects — pin + scroll de la liste dans le masque
+(function () {
+    const list = document.querySelector('.projects-list');
+    const clip = document.querySelector('.projects-list-clip');
+    if (!list || !clip) return;
+
+    function setup() {
+        const overflow = list.scrollHeight - clip.clientHeight;
+        gsap.to(list, {
+            y: overflow > 0 ? -overflow : 0,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.projects',
+                start: 'top top',
+                end: '+=100%',
+                pin: true,
+                pinSpacing: true,
+                scrub: 1,
+                anticipatePin: 1,
+            }
+        });
+    }
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(setup);
+    } else {
+        setTimeout(setup, 1000);
+    }
+})();
 
 // ========================================
 // Initialize

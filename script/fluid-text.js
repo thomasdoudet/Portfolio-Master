@@ -42,14 +42,15 @@ function initFluidText() {
         // Restaure les styles inline originaux
         if (originalInlineStyle) {
             element.setAttribute('style', originalInlineStyle);
-        } else {
+        }
+        else {
             element.removeAttribute('style');
         }
 
         // Calcule et applique la nouvelle font-size
         if (textWidth > 0) {
             const newFontSize = Math.floor((availableWidth / textWidth) * 100);
-            element.style.fontSize = newFontSize + 'px';
+            element.style.fontSize = newFontSize - 1 + 'px';
         }
     }
 
@@ -66,7 +67,8 @@ function initFluidText() {
             resizeAll();
             window.addEventListener('resize', resizeAll);
         });
-    } else {
+    }
+    else {
         // Fallback pour les navigateurs sans Support FontFaceSet
         setTimeout(resizeAll, 1000);
         window.addEventListener('resize', resizeAll);
@@ -76,6 +78,7 @@ function initFluidText() {
 // Initialiser quand le DOM est prêt
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initFluidText);
-} else {
+}
+else {
     initFluidText();
 }

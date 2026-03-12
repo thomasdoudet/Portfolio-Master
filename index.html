@@ -14,9 +14,9 @@
         rel="stylesheet">
 
     <!-- GSAP CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/SplitText.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/SplitText.min.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -47,13 +47,6 @@
     <main>
         <!-- SECTION 1: HERO -->
         <section id="hero" class="hero">
-            <!-- Background placeholder — tons chauds (remplacer par vraie photo) -->
-            <div class="hero-bg"></div>
-            <div class="hero-bg-overlay"></div>
-
-            <!-- Grain overlay -->
-            <div class="hero-grain"></div>
-
             <div class="hero-content">
                 <!-- Titre cinématique deux lignes — carton-titre de film -->
                 <h1 class="hero-title">
@@ -105,8 +98,6 @@
             <p class="eyebrow reveal">À propos</p>
             <div class="about-container">
                 <div class="about-images reveal">
-                    <!--<div class="about-img-main" style="background: linear-gradient(135deg, #1E2233 0%, #2A3050 100%);"></div>
-                    <div class="about-img-secondary" style="background: linear-gradient(135deg, #2A3050 0%, #1A1F30 100%);"></div>-->
                     <img class="about-img-main" src="images/about1.webp" alt="Thomas Doudet — Portrait">
                     <img class="about-img-secondary" src="images/about2.webp" alt="Thomas Doudet — Portrait (secondaire)">
                 </div>
@@ -265,6 +256,7 @@
             <div class="projects-bg-overlay"></div>
 
             <!-- Liste des projets — verticale, right-aligned comme la frame Figma -->
+            <div class="projects-list-clip">
             <ul class="projects-list" id="js-projects-list">
                 <li class="project-item active" data-index="0">
                     <a href="projets/ceremonie.html" class="project-item-link">La Cérémonie des Walid</a>
@@ -298,6 +290,7 @@
                     <a href="#" class="project-item-link">9Wagram</a>
                 </li>
             </ul>
+            </div>
 
             <!-- "Mes Projets" — titre décoratif italic en bas comme dans le Figma -->
             <div class="projects-heading-mask">
