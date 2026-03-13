@@ -146,7 +146,7 @@
     font-size: 0.625rem;
     letter-spacing: .2em;
     text-transform: uppercase;
-    color: var(--line-num);
+    color: var(--muted);
 }
 .proj-meta-item strong {
     display: block;
@@ -280,7 +280,7 @@
     font-size: 0.625rem;
     letter-spacing: .2em;
     text-transform: uppercase;
-    color: var(--line-num);
+    color: var(--muted);
     font-weight: 400;
 }
 .proj-strip-col ul {
@@ -379,7 +379,7 @@
     font-family: var(--sans);
     font-size: 0.6875rem;
     letter-spacing: .1em;
-    color: var(--line-num);
+    color: var(--muted);
     text-align: right;
 }
 
@@ -500,7 +500,7 @@
     font-size: 0.6875rem;
     letter-spacing: .15em;
     text-transform: uppercase;
-    color: var(--line-num);
+    color: var(--muted);
 }
 
 /* ─── GALLERY ───────────────────────────────────────────────── */
@@ -592,7 +592,7 @@
     font-size: 0.625rem;
     letter-spacing: .25em;
     text-transform: uppercase;
-    color: var(--line-num);
+    color: var(--muted);
 }
 .proj-next a {
     font-family: var(--serif);
