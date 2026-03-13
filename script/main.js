@@ -23,13 +23,27 @@ document.addEventListener('mousemove', (e) => {
 
 // Hide cursor when mouse leaves the document
 document.addEventListener('mouseleave', () => {
-    gsap.to(cursor, { opacity: 0, duration: 0.3 });
-    gsap.to(cursorRing, { opacity: 0, duration: 0.3 });
+    gsap.to(cursor, {
+        opacity: 0,
+        duration: 0.3
+    });
+
+    gsap.to(cursorRing, {
+        opacity: 0,
+        duration: 0.3
+    });
 });
 
 document.addEventListener('mouseenter', () => {
-    gsap.to(cursor, { opacity: 1, duration: 0.3 });
-    gsap.to(cursorRing, { opacity: 1, duration: 0.3 });
+    gsap.to(cursor, {
+        opacity: 1,
+        duration: 0.3
+    });
+
+    gsap.to(cursorRing, {
+        opacity: 1,
+        duration: 0.3
+    });
 });
 
 // ========================================
@@ -64,11 +78,17 @@ document.addEventListener('mouseenter', () => {
         if (goingDown) {
             // On scroll vers le bas
             if (!wasGoingDown && currentY > 80 && !hidden) {
-                gsap.to(navbar, { y: '-100%', opacity: 0, duration: 0.35, ease: 'power2.in' });
+                gsap.to(navbar, {
+                    y: '-100%',
+                    opacity: 0,
+                    duration: 0.35,
+                    ease: 'power2.in'
+                });
                 hidden = true;
             }
             wasGoingDown = true;
-        } else if (!goingDown && wasGoingDown) {
+        }
+        else if (!goingDown && wasGoingDown) {
             // On vient de passer de "scroll vers le bas" à "scroll vers le haut"
             scrollUpStartY = lastY;
             wasGoingDown = false;
@@ -78,13 +98,20 @@ document.addEventListener('mouseenter', () => {
         if (!goingDown && hidden && !wasGoingDown) {
             const scrolledUp = scrollUpStartY - currentY;
             if (scrolledUp >= SCROLL_UP_THRESHOLD) {
-                gsap.to(navbar, { y: '0%', opacity: 1, duration: 0.45, ease: 'power3.out' });
+                gsap.to(navbar, {
+                    y: '0%',
+                    opacity: 1,
+                    duration: 0.45,
+                    ease: 'power3.out'
+                });
                 hidden = false;
             }
         }
 
         lastY = currentY;
-    }, { passive: true });
+    }, {
+        passive: true
+    });
 })();
 
 // ========================================
@@ -115,7 +142,9 @@ gsap.to('.hero-scroll', {
 const roleInner = document.querySelector('.role-inner');
 const roleItems = roleInner ? roleInner.querySelectorAll('.role-item') : [];
 if (roleInner && roleItems.length > 1) {
-    gsap.set(roleInner, { y: 0 });
+    gsap.set(roleInner, {
+        y: 0
+    });
 
     let currentRole = 0;
     const totalRoles = roleItems.length; // includes the duplicate at the end
@@ -126,7 +155,9 @@ if (roleInner && roleItems.length > 1) {
     }
 
     let stepHeight = getStepHeight();
-    window.addEventListener('resize', () => { stepHeight = getStepHeight(); });
+    window.addEventListener('resize', () => {
+        stepHeight = getStepHeight();
+    });
 
     function rotateRole() {
         currentRole++;
@@ -141,7 +172,8 @@ if (roleInner && roleItems.length > 1) {
                     gsap.set(roleInner, { y: 0 }); // snap back without animation
                 }
             });
-        } else {
+        }
+        else {
             gsap.to(roleInner, { y: -(currentRole * stepHeight), duration: 0.6, ease: 'power3.inOut' });
         }
     }
@@ -221,22 +253,27 @@ if (statementSection && statementTitle && statementText) {
     });
 
     // Animate title: fade in + slight scale/y
-    statementTl.fromTo(statementTitle,
-        { opacity: 0, y: 30, scale: 0.95 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }
-    );
+    statementTl.fromTo(statementTitle, {
+        opacity: 0,
+        y: 30,
+        scale: 0.95
+    }, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+    });
 
     // Animate text: char by char fade in with stagger
-    statementTl.fromTo(statementChars,
-        { opacity: 0 },
-        {
-            opacity: 1,
-            duration: 0.02,
-            stagger: 0.03, // 30ms between each character
-            ease: 'power1.inOut'
-        },
-        '-=0.4' // Start slightly before title finishes
-    );
+    statementTl.fromTo(statementChars, {
+        opacity: 0
+    }, {
+        opacity: 1,
+        duration: 0.02,
+        stagger: 0.03, // 30ms between each character
+        ease: 'power1.inOut'
+    }, '-=0.4'); // Start slightly before title finishes
 }
 
 // ========================================
@@ -248,49 +285,108 @@ function setupRevealAnimations() {
 
     revealElements.forEach((element) => {
         gsap.to(element, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
             scrollTrigger: {
                 trigger: element,
                 start: 'top 85%',
                 toggleActions: 'play none none none'
-            },
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out'
+            }
         });
     });
 
     revealLeftElements.forEach((element) => {
         gsap.to(element, {
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            ease: 'power3.out',
             scrollTrigger: {
                 trigger: element,
                 start: 'top 85%',
                 toggleActions: 'play none none none'
-            },
-            opacity: 1,
-            x: 0,
-            duration: 0.8,
-            ease: 'power3.out'
+            }
         });
     });
 }
-
 setupRevealAnimations();
 
 // ========================================
-// Marquee Animation Loop
+// Parcours Horizontal Scroll + Parallax
 // ========================================
-const marqueeContent = document.querySelector('.marquee-content');
-if (marqueeContent) {
-    gsap.fromTo(marqueeContent,
-        { x: 0 },
-        {
-            x: -marqueeContent.offsetWidth,
-            duration: 20,
+const parcoursTrack = document.querySelector('.parcours-track');
+if (parcoursTrack) {
+    // Distance totale que doit parcourir le track (slide-in depuis droite + scroll)
+    const totalDistance = parcoursTrack.offsetWidth - window.innerWidth;
+    const totalMove = window.innerWidth + totalDistance;
+
+    // État initial : track hors viewport à droite
+    gsap.set(parcoursTrack, {
+        x: window.innerWidth
+    });
+
+    // ── TIMELINE UNIQUE + PIN UNIQUE ────────────────────────────────────────
+    // Phase 1 (dur. 1) : "Parcours" passe de crème (#F5E6C8) → filigrane (25%)
+    // Phase 2 (dur. 4) : track glisse de x:+vw → x:-totalDistance
+    const parcoursTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.parcours',
+            start: 'top top',
+            end: () => `+=${totalMove * 1.0 + window.innerWidth * 0.3}`,
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+        },
+    });
+
+    parcoursTl.to('.parcours-hero-text', {
+        color: 'rgba(245, 230, 200, 0.25)',
+        duration: 1,
+        ease: 'none',
+    });
+
+    parcoursTl.to(parcoursTrack, {
+        x: -totalDistance,
+        duration: 4,
+        ease: 'none',
+    }, '-=0.1');
+
+    // ── PARALLAX ────────────────────────────────────────────────────────────
+    // Images avancent légèrement plus vite que les textes (facteur ×1.3 environ)
+    parcoursTrack.querySelectorAll('.parcours-bloc').forEach((bloc) => {
+        const img = bloc.querySelector('.parcours-img-ph');
+        const imgWrap = bloc.querySelector('.parcours-img-wrap') || img;
+        const texts = bloc.querySelector('.parcours-bloc-texts');
+
+        const stConfig = {
+            trigger: bloc,
+            containerAnimation: parcoursTl,
+            start: 'left right',
+            end: 'right left',
+            scrub: true,
+        };
+
+        if (imgWrap) gsap.fromTo(imgWrap, { 
+            x: '35%'
+        }, {
+            x: '-35%',
             ease: 'none',
-            repeat: -1
-        }
-    );
+            scrollTrigger: {
+                ...stConfig
+            }
+        });
+        if (texts) gsap.fromTo(texts, {
+            x: '-18%'
+        }, {
+            x: '18%',
+            ease: 'none',
+            scrollTrigger: {
+                ...stConfig
+            }
+        });
+    });
 }
 
 // ========================================
@@ -310,13 +406,10 @@ if (projectItems.length > 0) {
                 trigger: '.projects-list',
                 start: 'top 80%',
                 toggleActions: 'play none none none',
-            },
+            }
         });
     });
 }
-
-
-
 
 // ========================================
 // Projects — cross-fade image de fond au hover
@@ -331,14 +424,22 @@ if (projectItems.length > 0) {
     function activateBg(index) {
         projectBgs.forEach((bg, i) => {
             gsap.killTweensOf(bg);
-            gsap.to(bg, { opacity: i === index ? 1 : 0, duration: 0.5, ease: 'power2.inOut' });
+            gsap.to(bg, {
+                opacity: i === index ? 1 : 0,
+                duration: 0.5,
+                ease: 'power2.inOut'
+            });
         });
     }
 
     function resetBg() {
         projectBgs.forEach((bg) => {
             gsap.killTweensOf(bg);
-            gsap.to(bg, { opacity: 0, duration: 0.4, ease: 'power2.inOut' });
+            gsap.to(bg, {
+                opacity: 0,
+                duration: 0.4,
+                ease: 'power2.inOut'
+            });
         });
     }
 
@@ -373,7 +474,11 @@ if (projectItems.length > 0) {
             // Puis dim tous les AUTRES liens (sauf celui survolé)
             document.querySelectorAll('.project-item-link').forEach((link) => {
                 if (link.closest('.project-item') !== item) {
-                    gsap.to(link, { opacity: 0.25, duration: 0.3, ease: 'power2.out' });
+                    gsap.to(link, {
+                        opacity: 0.25,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
                 }
             });
         });
@@ -381,7 +486,11 @@ if (projectItems.length > 0) {
         // Reset opacity when leaving an item (even if staying in the list)
         item.addEventListener('mouseleave', () => {
             document.querySelectorAll('.project-item-link').forEach((link) => {
-                gsap.to(link, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+                gsap.to(link, {
+                    opacity: 1,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
             });
         });
     });
@@ -390,7 +499,11 @@ if (projectItems.length > 0) {
     if (projectList) {
         projectList.addEventListener('mouseleave', () => {
             document.querySelectorAll('.project-item-link').forEach((link) => {
-                gsap.to(link, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+                gsap.to(link, {
+                    opacity: 1,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
             });
         });
     }
@@ -482,64 +595,6 @@ if (projectItems.length > 0) {
     });
 }());
 
-// ========================================
-// Parcours Horizontal Scroll + Parallax
-// ========================================
-const parcoursTrack = document.querySelector('.parcours-track');
-if (parcoursTrack) {
-    // Distance totale que doit parcourir le track (slide-in depuis droite + scroll)
-    const totalDistance = parcoursTrack.offsetWidth - window.innerWidth;
-    const totalMove = window.innerWidth + totalDistance;
-
-    // État initial : track hors viewport à droite
-    gsap.set(parcoursTrack, { x: window.innerWidth });
-
-    // ── TIMELINE UNIQUE + PIN UNIQUE ────────────────────────────────────────
-    // Phase 1 (dur. 1) : "Parcours" passe de crème (#F5E6C8) → filigrane (25%)
-    // Phase 2 (dur. 4) : track glisse de x:+vw → x:-totalDistance
-    const parcoursTl = gsap.timeline({
-        scrollTrigger: {
-            trigger: '.parcours',
-            start: 'top top',
-            end: () => `+=${totalMove * 1.0 + window.innerWidth * 0.3}`,
-            pin: true,
-            scrub: 1,
-            anticipatePin: 1,
-        },
-    });
-
-    parcoursTl.to('.parcours-hero-text', {
-        color: 'rgba(245, 230, 200, 0.25)',
-        duration: 1,
-        ease: 'none',
-    });
-
-    parcoursTl.to(parcoursTrack, {
-        x: -totalDistance,
-        duration: 4,
-        ease: 'none',
-    }, '-=0.1');
-
-    // ── PARALLAX ────────────────────────────────────────────────────────────
-    // Images avancent légèrement plus vite que les textes (facteur ×1.3 environ)
-    parcoursTrack.querySelectorAll('.parcours-bloc').forEach((bloc) => {
-        const img = bloc.querySelector('.parcours-img-ph');
-        const imgWrap = bloc.querySelector('.parcours-img-wrap') || img;
-        const texts = bloc.querySelector('.parcours-bloc-texts');
-
-        const stConfig = {
-            trigger: bloc,
-            containerAnimation: parcoursTl,
-            start: 'left right',
-            end: 'right left',
-            scrub: true,
-        };
-
-        if (imgWrap) gsap.fromTo(imgWrap, { x: '35%' }, { x: '-35%', ease: 'none', scrollTrigger: { ...stConfig } });
-        if (texts) gsap.fromTo(texts, { x: '-18%' }, { x: '18%', ease: 'none', scrollTrigger: { ...stConfig } });
-    });
-}
-
 // Projects — pin + scroll de la liste dans le masque
 (function () {
     const list = document.querySelector('.projects-list');
@@ -569,6 +624,21 @@ if (parcoursTrack) {
         setTimeout(setup, 1000);
     }
 })();
+
+// ========================================
+// Marquee Animation Loop
+// ========================================
+const marqueeContent = document.querySelector('.marquee-content');
+if (marqueeContent) {
+    gsap.fromTo(marqueeContent, {
+        x: 0
+    }, {
+        x: -marqueeContent.offsetWidth,
+        duration: 20,
+        ease: 'none',
+        repeat: -1
+    });
+}
 
 // ========================================
 // Initialize

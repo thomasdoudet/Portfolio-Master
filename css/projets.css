@@ -294,9 +294,15 @@
     color: var(--muted);
     padding: 0.5rem 0;
     border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 .proj-strip-col li:last-child {
     border-bottom: none;
+}
+.proj-strip-col img{
+    width: 2rem;
 }
 
 /* ─── IMAGE CORNERS ─────────────────────────────────────────── */
