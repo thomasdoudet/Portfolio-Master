@@ -630,8 +630,10 @@ if (projectItems.length > 0) {
     });
 }());
 
-// Projects — pin + scroll de la liste dans le masque
+// Projects — pin + scroll de la liste dans le masque (desktop uniquement)
 (function () {
+    if (window.innerWidth <= 768) return;
+
     const list = document.querySelector('.projects-list');
     const clip = document.querySelector('.projects-list-clip');
     if (!list || !clip) return;
