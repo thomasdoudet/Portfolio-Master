@@ -1,50 +1,78 @@
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
 // ========================================
-// Custom Cursor
+// Custom Cursor — desktop uniquement
 // ========================================
-const cursor = document.querySelector('.cursor');
-const cursorRing = document.querySelector('.cursor-ring');
+if (!isMobile) {
+    const cursor = document.querySelector('.cursor');
+    const cursorRing = document.querySelector('.cursor-ring');
 
-document.addEventListener('mousemove', (e) => {
-    gsap.to(cursor, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.1
+    document.addEventListener('mousemove', (e) => {
+        gsap.to(cursor, {
+            x: e.clientX,
+            y: e.clientY,
+            duration: 0.1
+        });
+
+        gsap.to(cursorRing, {
+            x: e.clientX,
+            y: e.clientY,
+            duration: 0.3
+        });
     });
 
-    gsap.to(cursorRing, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.3
-    });
-});
+    // Hide cursor when mouse leaves the document
+    document.addEventListener('mouseleave', () => {
+        gsap.to(cursor, {
+            opacity: 0,
+            duration: 0.3
+        });
 
-// Hide cursor when mouse leaves the document
-document.addEventListener('mouseleave', () => {
-    gsap.to(cursor, {
-        opacity: 0,
-        duration: 0.3
-    });
-
-    gsap.to(cursorRing, {
-        opacity: 0,
-        duration: 0.3
-    });
-});
-
-document.addEventListener('mouseenter', () => {
-    gsap.to(cursor, {
-        opacity: 1,
-        duration: 0.3
+        gsap.to(cursorRing, {
+            opacity: 0,
+            duration: 0.3
+        });
     });
 
-    gsap.to(cursorRing, {
-        opacity: 1,
-        duration: 0.3
+    document.addEventListener('mouseenter', () => {
+        gsap.to(cursor, {
+            opacity: 1,
+            duration: 0.3
+        });
+
+        gsap.to(cursorRing, {
+            opacity: 1,
+            duration: 0.3
+        });
     });
-});
+}
+
+// ========================================
+// Hamburger Menu
+// ========================================
+(function () {
+    const hamburger = document.getElementById('js-hamburger');
+    const navLinks = document.getElementById('js-nav-links');
+    if (!hamburger || !navLinks) return;
+
+    hamburger.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('is-open');
+        hamburger.classList.toggle('is-open', isOpen);
+        hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // Fermer le menu au clic sur un lien
+    navLinks.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+            navLinks.classList.remove('is-open');
+            hamburger.classList.remove('is-open');
+            hamburger.setAttribute('aria-expanded', 'false');
+        });
+    });
+}());
 
 // ========================================
 // Navbar — masquer au scroll bas, réapparaître au scroll haut (avec délai de scroll)
@@ -174,7 +202,11 @@ if (roleInner && roleItems.length > 1) {
             });
         }
         else {
-            gsap.to(roleInner, { y: -(currentRole * stepHeight), duration: 0.6, ease: 'power3.inOut' });
+            gsap.to(roleInner, {
+                y: -(currentRole * stepHeight),
+                duration: 0.6,
+                ease: 'power3.inOut'
+            });
         }
     }
 
@@ -314,79 +346,82 @@ function setupRevealAnimations() {
 setupRevealAnimations();
 
 // ========================================
-// Parcours Horizontal Scroll + Parallax
+// Parcours — horizontal (desktop) ou vertical (mobile)
 // ========================================
 const parcoursTrack = document.querySelector('.parcours-track');
 if (parcoursTrack) {
-    // Distance totale que doit parcourir le track (slide-in depuis droite + scroll)
-    const totalDistance = parcoursTrack.offsetWidth - window.innerWidth;
-    const totalMove = window.innerWidth + totalDistance;
+    if (window.innerWidth > 768) {
+        // ── DESKTOP : scroll horizontal avec pin + parallax ──
+        const totalDistance = parcoursTrack.offsetWidth - window.innerWidth;
+        const totalMove = window.innerWidth + totalDistance;
 
-    // État initial : track hors viewport à droite
-    gsap.set(parcoursTrack, {
-        x: window.innerWidth
-    });
+        gsap.set(parcoursTrack, { x: window.innerWidth });
 
-    // ── TIMELINE UNIQUE + PIN UNIQUE ────────────────────────────────────────
-    // Phase 1 (dur. 1) : "Parcours" passe de crème (#F5E6C8) → filigrane (25%)
-    // Phase 2 (dur. 4) : track glisse de x:+vw → x:-totalDistance
-    const parcoursTl = gsap.timeline({
-        scrollTrigger: {
-            trigger: '.parcours',
-            start: 'top top',
-            end: () => `+=${totalMove * 1.0 + window.innerWidth * 0.3}`,
-            pin: true,
-            scrub: 1,
-            anticipatePin: 1,
-        },
-    });
-
-    parcoursTl.to('.parcours-hero-text', {
-        color: 'rgba(245, 230, 200, 0.25)',
-        duration: 1,
-        ease: 'none',
-    });
-
-    parcoursTl.to(parcoursTrack, {
-        x: -totalDistance,
-        duration: 4,
-        ease: 'none',
-    }, '-=0.1');
-
-    // ── PARALLAX ────────────────────────────────────────────────────────────
-    // Images avancent légèrement plus vite que les textes (facteur ×1.3 environ)
-    parcoursTrack.querySelectorAll('.parcours-bloc').forEach((bloc) => {
-        const img = bloc.querySelector('.parcours-img-ph');
-        const imgWrap = bloc.querySelector('.parcours-img-wrap') || img;
-        const texts = bloc.querySelector('.parcours-bloc-texts');
-
-        const stConfig = {
-            trigger: bloc,
-            containerAnimation: parcoursTl,
-            start: 'left right',
-            end: 'right left',
-            scrub: true,
-        };
-
-        if (imgWrap) gsap.fromTo(imgWrap, { 
-            x: '35%'
-        }, {
-            x: '-35%',
-            ease: 'none',
+        const parcoursTl = gsap.timeline({
             scrollTrigger: {
-                ...stConfig
-            }
+                trigger: '.parcours',
+                start: 'top top',
+                end: () => `+=${totalMove * 1.0 + window.innerWidth * 0.3}`,
+                pin: true,
+                scrub: 1,
+                anticipatePin: 1,
+            },
         });
-        if (texts) gsap.fromTo(texts, {
-            x: '-18%'
-        }, {
-            x: '18%',
+
+        parcoursTl.to('.parcours-hero-text', {
+            color: 'rgba(245, 230, 200, 0.25)',
+            duration: 1,
             ease: 'none',
-            scrollTrigger: {
-                ...stConfig
-            }
         });
-    });
+
+        parcoursTl.to(parcoursTrack, {
+            x: -totalDistance,
+            duration: 4,
+            ease: 'none',
+        }, '-=0.1');
+
+        // Parallax
+        parcoursTrack.querySelectorAll('.parcours-bloc').forEach((bloc) => {
+            const img = bloc.querySelector('.parcours-img-ph');
+            const imgWrap = bloc.querySelector('.parcours-img-wrap') || img;
+            const texts = bloc.querySelector('.parcours-bloc-texts');
+
+            const stConfig = {
+                trigger: bloc,
+                containerAnimation: parcoursTl,
+                start: 'left right',
+                end: 'right left',
+                scrub: true,
+            };
+
+            if (imgWrap) gsap.fromTo(imgWrap, { x: '35%' }, {
+                x: '-35%', ease: 'none',
+                scrollTrigger: { ...stConfig }
+            });
+            if (texts) gsap.fromTo(texts, { x: '-18%' }, {
+                x: '18%', ease: 'none',
+                scrollTrigger: { ...stConfig }
+            });
+        });
+
+    } else {
+        // ── MOBILE : reveals simples au scroll pour chaque bloc ──
+        parcoursTrack.querySelectorAll('.parcours-bloc').forEach(bloc => {
+            gsap.fromTo(bloc,
+                { opacity: 0, y: 40 },
+                {
+                    opacity: 1, y: 0,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: bloc,
+                        start: 'top 88%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            );
+        });
+    }
 }
 
 // ========================================

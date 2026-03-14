@@ -122,39 +122,40 @@ heroTl
 
     // Phase 1 — Textes glissent vers le bas (derrière masques overflow:hidden)
     // fromTo explicit : évite que GSAP capture les valeurs avant la fin de l'animation d'entrée
-    tl.fromTo([heroBack, ...heroCorners], {
-        opacity: 1
-    }, {
-        opacity: 0,
-        duration: 0.28,
-        ease: 'power2.in'
-    })
-    .fromTo(heroMeta, {
-        y: 0
-    }, {
-        y: '130%',
-        duration: 0.38,
-        ease: 'power3.in'
-    }, '<')
-    .fromTo(heroTitle, {
-        y: 0
-    }, {
-        y: '150%',
-        duration: 0.38,
-        ease: 'power3.in'
-    }, "<+=0.1")
-    // Phase 2 — Zoom sur le média
-    .to(media, {
-        scale: 1.75,
-        duration: 1,
-        ease: 'none',
-    })
-    // Phase 3 — Fondu du fond → révèle la couleur de fond
-    .to(heroImg, {
-        opacity: 0,
-        duration: 0.38,
-        ease: 'none',
-    }, "<+=0.1");
+    tl
+        .fromTo([heroBack, ...heroCorners], {
+            opacity: 1
+        }, {
+            opacity: 0,
+            duration: 0.28,
+            ease: 'power2.in'
+        })
+        .fromTo(heroMeta, {
+            y: 0
+        }, {
+            y: '130%',
+            duration: 0.38,
+            ease: 'power3.in'
+        }, '<')
+        .fromTo(heroTitle, {
+            y: 0
+        }, {
+            y: '150%',
+            duration: 0.38,
+            ease: 'power3.in'
+        }, "<+=0.1")
+        // Phase 2 — Zoom sur le média
+        .to(media, {
+            scale: 1.75,
+            duration: 1,
+            ease: 'none',
+        })
+        // Phase 3 — Fondu du fond → révèle la couleur de fond
+        .to(heroImg, {
+            opacity: 0,
+            duration: 0.38,
+            ease: 'none',
+        }, "<+=0.1");
 }());
 
 // ═══════════════════════════════════════════════════════════
@@ -195,14 +196,13 @@ heroTl
     });
 
     tl.fromTo(stmtChars, {
-            opacity: 0
-        }, {
-            opacity: 1,
-            duration: 0.02,
-            stagger: 0.03,
-            ease: 'power2.inOut'
-        }
-    );
+        opacity: 0
+    }, {
+        opacity: 1,
+        duration: 0.02,
+        stagger: 0.03,
+        ease: 'power2.inOut'
+    });
 }());
 
 // ═══════════════════════════════════════════════════════════
