@@ -809,7 +809,7 @@ main {
    MARQUEE SECTION
    =================================== */
 .marquee-section {
-    padding: 3.75rem 5rem;
+    padding: 5rem 0;
     position: relative;
     z-index: 10;
     overflow: hidden;
@@ -818,6 +818,10 @@ main {
 .marquee {
     position: relative;
     width: 100%;
+}
+
+.marquee.reveal{
+    display: flex;
 }
 
 .marquee-content {
@@ -830,6 +834,7 @@ main {
     font-weight: 300;
     color: var(--muted);
     animation: marquee 20s linear infinite;
+    padding-right: 1.25rem;
 }
 
 @keyframes marquee {
@@ -837,7 +842,7 @@ main {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(-50%);
+        transform: translateX(-100%);
     }
 }
 
@@ -962,7 +967,7 @@ main {
     }
 
     .marquee-section {
-        padding: 3rem 2.5rem;
+        padding: 3rem 0;
     }
 
     .contact {

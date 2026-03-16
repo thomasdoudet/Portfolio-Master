@@ -665,7 +665,7 @@ if (projectItems.length > 0) {
 // ========================================
 // Marquee Animation Loop
 // ========================================
-const marqueeContent = document.querySelector('.marquee-content');
+/**const marqueeContent = document.querySelector('.marquee-content');
 if (marqueeContent) {
     gsap.fromTo(marqueeContent, {
         x: 0
@@ -675,7 +675,7 @@ if (marqueeContent) {
         ease: 'none',
         repeat: -1
     });
-}
+}*/
 
 // ========================================
 // Initialize

@@ -117,7 +117,7 @@
                     des reflets et des mouvements épars en basse lumière. Il a fallu s'adapter à chaque fois — en termes
                     de réglages, de positionnement, de timing — pour saisir l'instant.</p>
             </div>
-            <video src="videos/interbde.webm" controls poster="images/interbde-1.webp"></video>
+            <video id="interbde-video" src="videos/interbde.webm" controls></video>
         </section>
 
         <!-- DUO IMAGES -->
@@ -192,7 +192,7 @@
                     <img src="images/interbde-8.webp" alt="">
                 </div>
                 <div class="proj-gallery-item">
-                    <img src="images/interbde-6.webp" alt="">
+                    <img src="images/interbde-2.webp" alt="">
                 </div>
                 <div class="proj-gallery-item span-2">
                     <img src="images/interbde-10.webp" alt="">
@@ -214,6 +214,26 @@
 
     <script src="../script/main.js"></script>
     <script src="../script/projets.js"></script>
+    <script>
+        (function () {
+            const video = document.getElementById('interbde-video');
+            const SEEK_TIME = 2; // secondes — ajuste pour choisir la frame
+
+            function capturePoster() {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                video.poster = canvas.toDataURL('image/webp');
+                video.currentTime = 0;
+            }
+
+            video.addEventListener('loadedmetadata', function () {
+                video.currentTime = Math.min(SEEK_TIME, video.duration * 0.1);
+            });
+            video.addEventListener('seeked', capturePoster, { once: true });
+        })();
+    </script>
 
 </body>
 
